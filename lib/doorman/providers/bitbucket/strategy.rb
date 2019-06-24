@@ -8,7 +8,7 @@ module Obscured
           def valid?
             emails = Bitbucket.configuration[:token].emails
 
-            unless Bitbucket.configuration.valid_domains.nil?
+            unless Bitbucket.configuration.domains.nil?
               if valid_domain!
                 return true
               end
@@ -37,7 +37,7 @@ module Obscured
           private
           def valid_domain!
             emails = Bitbucket.configuration[:token].emails || []
-            domains = Bitbucket.configuration.valid_domains.split(',')
+            domains = Bitbucket.configuration.domains.split(',')
 
             emails.each do |email|
               unless domains.detect { |domain| email.end_with?(domain) } == nil

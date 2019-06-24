@@ -8,7 +8,7 @@ module Obscured
           def valid?
             emails = GitHub.configuration[:token].emails
 
-            unless GitHub.configuration.valid_domains.nil?
+            unless GitHub.configuration.domains.nil?
               if valid_domain!
                 return true
               end
@@ -35,9 +35,10 @@ module Obscured
           end
 
           private
+
           def valid_domain!
             emails = GitHub.configuration[:token].emails || []
-            domains = GitHub.configuration.valid_domains.split(',')
+            domains = GitHub.configuration.domains.split(',')
 
             emails.each do |email|
               unless domains.detect { |domain| email.end_with?(domain) } == nil

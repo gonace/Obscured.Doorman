@@ -33,8 +33,8 @@ module Obscured
         # Provider redirect endpoint
         config_option :redirect_url
 
-        # Authentication valid_domains to login
-        config_option :valid_domains
+        # Authentication domains to login
+        config_option :domains
         # Authentication token
         config_option :token
 

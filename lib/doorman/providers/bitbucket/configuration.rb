@@ -20,8 +20,8 @@ module Obscured
               token_url:      'https://bitbucket.org/site/oauth2/access_token',
               login_url:      '/doorman/oauth2/bitbucket',
               redirect_url:   '/doorman/oauth2/bitbucket/callback',
-              valid_domains:  nil,
-              token:          nil,
+              domains:        nil,
+              token:          nil
             )
           end
         end

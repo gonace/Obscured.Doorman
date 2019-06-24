@@ -51,13 +51,13 @@ Obscured::Doorman.setup do |cfg|
       c.enabled         = nil
       c.client_id       = nil
       c.client_secret   = nil
-      c.valid_domains   = nil
+      c.domains   = nil
     end,
     Obscured::Doorman::Providers::GitHub.setup do |c|
       c.enabled         = nil
       c.client_id       = nil
       c.client_secret   = nil
-      c.valid_domains   = nil
+      c.domains   = nil
     end
   ]
   ...
@@ -88,13 +88,13 @@ Obscured::Doorman.setup do |cfg|
       c.enabled         = false
       c.client_id       = nil
       c.client_secret   = nil
-      c.valid_domains   = nil
+      c.domains         = nil
     end,
     Obscured::Doorman::Providers::GitHub.setup do |c|
       c.enabled         = false
       c.client_id       = nil
       c.client_secret   = nil
-      c.valid_domains   = nil
+      c.domains         = nil
     end
   ],
   cfg.paths = {

@@ -20,7 +20,7 @@ module Obscured
               token_url:      'https://github.com/login/oauth/access_token',
               login_url:      '/doorman/oauth2/github',
               redirect_url:   '/doorman/oauth2/github/callback',
-              valid_domains:  nil,
+              domains:        nil,
               token:          nil,
             )
           end
