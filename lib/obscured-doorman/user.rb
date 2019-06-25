@@ -6,32 +6,28 @@ module Obscured
       include BCrypt
 
       store_in database: Obscured::Doorman.configuration.db_name,
-               collection: Obscured::Doorman.configuration.db_collection,
-               client: Obscured::Doorman.configuration.db_client
+               client: Obscured::Doorman.configuration.db_client,
+               collection: 'users'
 
-      field :username,              type: String
-      field :password,              type: String
-      field :salt,                  type: String
-      field :first_name,            type: String, default: ''
-      field :last_name,             type: String, default: ''
-      field :mobile,                type: String, default: ''
-      #field :title,                 type: String, default: Obscured::Doorman::Titles::APPRENTICE
-      field :role,                  type: Symbol, default: Obscured::Doorman::Roles::ADMIN
-      field :confirmed,             type: Boolean, default: true
-      field :confirm_token,         type: String
-      field :remember_token,        type: String
-      #field :created_from,          type: Symbol
-      field :last_login,            type: DateTime
+      field :username, type: String
+      field :password, type: String
+      field :salt, type: String
+      field :first_name, type: String, default: ''
+      field :last_name, type: String, default: ''
+      field :mobile, type: String, default: ''
+      field :role, type: Symbol, default: Obscured::Doorman::Roles::ADMIN
+      field :confirmed, type: Boolean, default: true
+      #field :confirm_token, type: String
+      #field :remember_token, type: String
+      field :last_login, type: DateTime
+
+      has_many :tokens
 
       alias email username
 
-      attr_accessor :password_confirmation
-
       class << self
         def make(opts)
-          if User.where(username: opts[:username]).exists?
-            raise Obscured::Doorman::Error.new(:already_exists, what: 'User does already exists!')
-          end
+          raise Obscured::Doorman::Error.new(:already_exists, what: 'User does already exists!') if User.where(username: opts[:username]).exists?
 
           user = new
           user.username = opts[:username]
@@ -45,6 +41,12 @@ module Obscured
           user.save
           user
         end
+
+        def authenticate(username, password)
+          user = find_by(username: username)
+          user if user && user.authenticated?(password)
+          nil
+        end
       end
 
 
@@ -52,35 +54,13 @@ module Obscured
         "#{first_name} #{last_name}"
       end
 
-      def username=(username)
-        if User.where(username: username).exists?
-          raise Obscured::Doorman::Error.new(:already_exists, what: 'user')
-        end
-
-        self.username = username
-      end
-
       def name=(first_name, last_name)
         self.first_name = first_name
         self.last_name = last_name
       end
 
-      def role=(role)
-        self.role = role
-      end
-
-      def mobile=(mobile)
-        self.mobile = mobile
-      end
-
       def password?(password)
         self.password = Password.create(password)
-      end
-
-      def self.authenticate(username, password)
-        user = get_by_username(username)
-        user if user && user.authenticated?(password)
-        nil
       end
 
       def authenticated?(password)
@@ -88,40 +68,45 @@ module Obscured
       end
 
       def remember_me!
-        self.remember_token = new_token
-        save
+        Obscured::Doorman::Token.make!(
+          user: self,
+          type: :remember,
+          token: token,
+          expires: Obscured::Doorman.configuration.remember_for.days.seconds
+        )
       end
 
       def forget_me!
-        self.remember_token = nil
-        save
+        self.tokens.delete(type: :remember)
       end
 
       def confirm_email!
-        self.confirmed     = true
-        self.confirm_token = nil
+        self.confirmed = true
+        self.tokens.delete(type: :confirm)
         save
       end
 
       def forgot_password!
-        self.confirm_token = new_token
-        save
+        Obscured::Doorman::Token.make!(
+          user: self,
+          type: :password,
+          token: token,
+          expires: 2.hours.seconds
+        )
       end
 
       def remembered_password!
-        self.confirm_token = nil
+        self.tokens.delete(type: :password)
         save
       end
 
-      def reset_password!(new_password, new_password_confirmation)
-        unless new_password == new_password_confirmation
-          false
-        else
-          self.password_confirmation  = new_password_confirmation
-          self.password               = Password.create(new_password) if valid?
-          add_history_log('Password has been reset', Obscured::Doorman::Types::SYSTEM)
+      def reset_password!(password, token)
+        token = self.tokens.where(token: token)
+        unless token
+          self.password = Password.create(password)
           save
         end
+        false
       end
 
 
@@ -129,7 +114,7 @@ module Obscured
 
       def salt
         if @salt.nil? || @salt.empty?
-          secret    = Digest::SHA1.hexdigest("--#{Time.now.utc}--")
+          secret = Digest::SHA1.hexdigest("--#{username}--")
           self.salt = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{secret}--")
         end
         @salt
@@ -139,15 +124,8 @@ module Obscured
         Digest::SHA1.hexdigest("--#{salt}--#{string}--")
       end
 
-      def new_token
-        encrypt("--#{Time.now.utc}--")
-      end
-
-      def validate!
-        if valid?
-          #self.password = Password.create(password)
-          self.confirm_token = new_token
-        end
+      def token
+        encrypt("--#{username}/#{Time.now.utc}--")
       end
     end
   end

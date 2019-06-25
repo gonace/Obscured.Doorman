@@ -12,7 +12,7 @@ module Obscured
             end
           end
 
-          app.get '/obscured-doorman/forgot/?' do
+          app.get '/doorman/forgot/?' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
 
             email = cookies[:email]
@@ -23,7 +23,7 @@ module Obscured
             haml :forgot, :locals => {:email => email}
           end
 
-          app.post '/obscured-doorman/forgot' do
+          app.post '/doorman/forgot' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 
@@ -49,7 +49,7 @@ module Obscured
             redirect Obscured::Doorman.configuration.paths[:login]
           end
 
-          app.get '/obscured-doorman/reset/:token/?' do
+          app.get '/doorman/reset/:token/?' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
 
             if params[:token].nil? || params[:token].empty?
@@ -63,14 +63,14 @@ module Obscured
               redirect Obscured::Doorman.configuration.paths[:login]
             end
 
-            haml :reset, :locals => { :confirm_token => user.confirm_token, :email => user.username }
+            haml :reset, :locals => { :token => user.confirm_token, :email => user.username }
           end
 
-          app.post '/obscured-doorman/reset' do
+          app.post '/doorman/reset' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 
-            user = User.where({:confirm_token => params[:user][:confirm_token]}).first rescue nil
+            user = User.where({:confirm_token => params[:user][:token]}).first rescue nil
             if user.nil?
               notify :error, :reset_no_user
               redirect Obscured::Doorman.configuration.paths[:login]
@@ -81,8 +81,9 @@ module Obscured
             end
 
             success = user.reset_password!(
-                params['user']['password'],
-                params['user']['password_confirmation'])
+              params['user']['password'],
+              params['user']['token']
+            )
 
             unless success
               notify :error, :reset_unmatched_passwords

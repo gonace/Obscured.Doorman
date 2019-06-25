@@ -43,7 +43,7 @@ module Obscured
 
         Warden::Manager.before_failure do |env, _opts|
           # Because authentication failure can happen on any request but
-          # we handle it only under "post '/obscured-doorman/unauthenticated'",
+          # we handle it only under "post '/doorman/unauthenticated'",
           # we need o change request to POST
           env['REQUEST_METHOD'] = 'POST'
           # And we need to do the following to work with  Rack::MethodOverride

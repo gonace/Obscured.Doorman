@@ -14,6 +14,10 @@ Dir.glob('./lib/*.rb').sort.each(&method(:require))
 Mongoid.load!(File.join(File.dirname(__FILE__), '/config/mongoid.yml'), 'spec')
 Mongo::Logger.logger.level = Logger::ERROR
 
+Obscured::Doorman.setup do |cfg|
+  cfg.db_client = :default
+end
+
 RSpec.configure do |c|
   c.include FactoryBot::Syntax::Methods
   c.filter_run_excluding integration: true
@@ -23,10 +27,10 @@ RSpec.configure do |c|
     FactoryBot.find_definitions
     Mongoid.purge!
 
-    Mongoid::Search.setup do |cfg|
-      cfg.strip_symbols = /[\"]/
-      cfg.strip_accents = //
-    end
+    #Mongoid::Search.setup do |cfg|
+    #  cfg.strip_symbols = /[\"]/
+    #  cfg.strip_accents = //
+    #end
   end
 
   c.before(:each) do

@@ -20,6 +20,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
+  gem.add_dependency 'bcrypt'
   gem.add_dependency 'geocoder'
   gem.add_dependency 'haml'
   gem.add_dependency 'mail'
@@ -28,10 +29,12 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rack-contrib'
   gem.add_dependency 'rest-client'
   gem.add_dependency 'sinatra'
+  gem.add_dependency 'sinatra-contrib'
   gem.add_dependency 'sinatra-flash'
   gem.add_dependency 'sinatra-partial'
   gem.add_dependency 'warden'
 
+  gem.add_development_dependency 'factory_bot'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'simplecov'
 end

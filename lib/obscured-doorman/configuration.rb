@@ -36,8 +36,6 @@ module Obscured
 
       # Database name
       config_option :db_name
-      # Database collection
-      config_option :db_collection
       # Database client
       config_option :db_client
 
@@ -72,7 +70,6 @@ module Obscured
           remember_cookie: 'sinatra.doorman.remember',
           remember_for: 30,
           db_name: 'doorman',
-          db_collection: 'users',
           db_client: :'doorman',
           smtp_domain: 'doorman.local',
           smtp_server: '127.0.0.1',

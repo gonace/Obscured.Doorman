@@ -32,11 +32,11 @@ module Obscured
 
           Warden::Strategies.add(:bitbucket, Bitbucket::Strategy)
 
-          app.get '/obscured-doorman/oauth2/bitbucket' do
+          app.get '/doorman/oauth2/bitbucket' do
             redirect "#{Bitbucket.configuration[:authorize_url]}?client_id=#{Bitbucket.configuration[:client_id]}&response_type=code&scopes=#{Bitbucket.configuration[:scopes]}"
           end
 
-          app.get '/obscured-doorman/oauth2/bitbucket/callback/?' do
+          app.get '/doorman/oauth2/bitbucket/callback/?' do
             begin
               response = RestClient::Request.new(
                 :method => :post,
@@ -64,7 +64,7 @@ module Obscured
               message = JSON.parse(e.response)
               Doorman.logger.error e
               notify :error, "#{message['error_description']} (#{message['error']})"
-              redirect '/obscured-doorman/login'
+              redirect '/doorman/login'
             ensure
               # Notify if there are any messages from Warden.
               unless warden.message.blank?

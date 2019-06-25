@@ -13,13 +13,11 @@ module Obscured
                 return true
               end
             else
-              if emails.length > 0
-                return true
-              end
+              return true if emails.length > 0
             end
 
-            fail!(Bitbucket::Messages[:invalid_domain])
-            return false
+            fail!(Bitbucket::MESSAGES[:invalid_domain])
+            false
           end
 
           def authenticate!
@@ -40,9 +38,7 @@ module Obscured
             domains = Bitbucket.configuration.domains.split(',')
 
             emails.each do |email|
-              unless domains.detect { |domain| email.end_with?(domain) } == nil
-                return true
-              end
+              return true unless domains.detect { |domain| email.end_with?(domain) } == nil
             end
             false
           end

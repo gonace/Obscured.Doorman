@@ -32,7 +32,7 @@ module Obscured
               user.remember_me!  # new token
               auth.env['rack.cookies'][Obscured::Doorman.configuration.remember_cookie] = {
                   :value => user.remember_token,
-                  :expires => Time.now + Obscured::Doorman.configuration.remember_for * 24 * 3600,
+                  :expires => Time.now + Obscured::Doorman.configuration.remember_for.days.seconds,
                   :path => '/' }
             end
           end

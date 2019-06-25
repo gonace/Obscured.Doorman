@@ -3,14 +3,12 @@ module Obscured
     module Providers
       module Bitbucket
         class AccessToken
-          #include ActiveModel::Model
           attr_accessor :access_token
           attr_accessor :refresh_token
           attr_accessor :scopes
           attr_accessor :expires_in
           attr_accessor :expires_date
           attr_accessor :emails
-          #validates :access_token, :refresh_token, :scopes, :expires_in, presence: true
 
           def initialize(attributes={})
             @access_token = attributes[:access_token]

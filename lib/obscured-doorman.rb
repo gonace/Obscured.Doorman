@@ -1,3 +1,4 @@
+require 'bcrypt'
 require 'geocoder'
 require 'haml'
 require 'mail'
@@ -12,23 +13,20 @@ require 'rack/contrib/cookies'
 require 'rest-client'
 require 'warden'
 
-require 'obscured-doorman/version'
 require 'obscured-doorman/configuration'
 require 'obscured-doorman/errors'
-require 'obscured-doorman/domain/entity'
-require 'obscured-doorman/domain/history'
 require 'obscured-doorman/providers/bitbucket'
 require 'obscured-doorman/providers/github'
 require 'obscured-doorman/strategies/password'
 require 'obscured-doorman/strategies/forgot_password'
 require 'obscured-doorman/strategies/remember_me'
 require 'obscured-doorman/utilities/hash'
-require 'obscured-doorman/utilities/titles'
 require 'obscured-doorman/utilities/roles'
 require 'obscured-doorman/utilities/types'
 require 'obscured-doorman/helpers'
 require 'obscured-doorman/mailer'
 require 'obscured-doorman/messages'
+require 'obscured-doorman/version'
 require 'obscured-doorman/base'
 
 
@@ -54,7 +52,8 @@ module Obscured
       def setup
         yield(configuration)
 
-        require 'doorman/user'
+        require 'obscured-doorman/token'
+        require 'obscured-doorman/user'
       end
 
       def configuration

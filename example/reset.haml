@@ -16,9 +16,9 @@
             - else
               %span
 
-          %form#formReset.mt-4{:action => '/obscured-doorman/reset', :method => 'POST'}
+          %form#formReset.mt-4{:action => '/doorman/reset', :method => 'POST'}
             %input#Email{:name => 'user[email]', :type => 'hidden', :value => email}
-            %input#confirmToken{:name => 'user[confirm_token]', :type => 'hidden', :value => confirm_token}
+            %input#confirmToken{:name => 'user[token]', :type => 'hidden', :value => token}
             - if flash[:success]
               %p.text-center.text-success= flash[:success]
             - if flash[:error]

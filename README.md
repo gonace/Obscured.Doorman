@@ -55,13 +55,13 @@ Obscured::Doorman.setup do |cfg|
       c.enabled         = nil
       c.client_id       = nil
       c.client_secret   = nil
-      c.domains   = nil
+      c.domains         = nil
     end,
     Obscured::Doorman::Providers::GitHub.setup do |c|
       c.enabled         = nil
       c.client_id       = nil
       c.client_secret   = nil
-      c.domains   = nil
+      c.domains         = nil
     end
   ]
   ...
@@ -77,9 +77,8 @@ Obscured::Doorman.setup do |cfg|
   cfg.registration    = false
   cfg.confirmation    = false
   cfg.db_name         = 'doorman'
-  cfg.db_collection   = 'users'
   cfg.db_client       = :doorman,
-  cfg.mtp_domain      = 'doorman.local'
+  cfg.smtp_domain      = 'doorman.local'
   cfg.smtp_server     = '127.0.0.1'
   cfg.smtp_username   = nil
   cfg.smtp_password   = nil

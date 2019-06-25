@@ -16,7 +16,7 @@
             - else
               %span
 
-          %form#formRegister.mt-4{:action => '/obscured-doorman/register', :method => 'POST'}
+          %form#formRegister.mt-4{:action => '/doorman/register', :method => 'POST'}
             - if flash[:success]
               %p.text-center.text-success= flash[:success]
             - if flash[:error]
