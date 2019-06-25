@@ -70,7 +70,7 @@ module Obscured
           remember_cookie: 'sinatra.doorman.remember',
           remember_for: 30,
           db_name: 'doorman',
-          db_client: :'doorman',
+          db_client: :doorman,
           smtp_domain: 'doorman.local',
           smtp_server: '127.0.0.1',
           smtp_port: 587,

@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 require_relative 'setup'
 
 describe Obscured::Doorman::Token do
-  let!(:user) { FactoryBot.create(:user) }
-  let!(:sha) { Digest::SHA1.hexdigest("--#{user.email}--") }
-
   before(:each) {
     Obscured::Doorman::Token.delete_all
   }
+
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:sha) { Digest::SHA1.hexdigest("--#{user.email}--") }
 
   context 'make' do
     let!(:token) { Obscured::Doorman::Token.make(user: user, type: :password, token: sha) }

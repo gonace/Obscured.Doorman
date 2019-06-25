@@ -16,12 +16,11 @@ module Obscured
       field :last_name, type: String, default: ''
       field :mobile, type: String, default: ''
       field :role, type: Symbol, default: Obscured::Doorman::Roles::ADMIN
-      field :confirmed, type: Boolean, default: true
-      #field :confirm_token, type: String
-      #field :remember_token, type: String
-      field :last_login, type: DateTime
+      field :confirmed, type: Boolean, default: false
 
       has_many :tokens
+
+      index({ username: 1 }, background: true)
 
       alias email username
 
@@ -31,7 +30,7 @@ module Obscured
 
           user = new
           user.username = opts[:username]
-          user.password = Password.create(opts[:password])
+          user.password = BCrypt::Password.create(opts[:password])
           user.confirmed = opts[:confirmed] unless opts[:confirmed].nil?
           user
         end
@@ -44,7 +43,7 @@ module Obscured
 
         def authenticate(username, password)
           user = find_by(username: username)
-          user if user && user.authenticated?(password)
+          user if user&.authenticated?(password)
           nil
         end
       end
@@ -54,9 +53,9 @@ module Obscured
         "#{first_name} #{last_name}"
       end
 
-      def name=(first_name, last_name)
-        self.first_name = first_name
-        self.last_name = last_name
+      def name=(arguments)
+        self.first_name = arguments[:first_name]
+        self.last_name = arguments[:last_name]
       end
 
       def password?(password)
@@ -77,12 +76,12 @@ module Obscured
       end
 
       def forget_me!
-        self.tokens.delete(type: :remember)
+        tokens.delete(type: :remember)
       end
 
-      def confirm_email!
+      def confirm!
         self.confirmed = true
-        self.tokens.delete(type: :confirm)
+        tokens.delete(type: :confirm)
         save
       end
 
@@ -96,12 +95,12 @@ module Obscured
       end
 
       def remembered_password!
-        self.tokens.delete(type: :password)
+        tokens.delete(type: :password)
         save
       end
 
       def reset_password!(password, token)
-        token = self.tokens.where(token: token)
+        token = tokens.where(token: token)
         unless token
           self.password = Password.create(password)
           save
@@ -116,6 +115,7 @@ module Obscured
         if @salt.nil? || @salt.empty?
           secret = Digest::SHA1.hexdigest("--#{username}--")
           self.salt = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{secret}--")
+          save
         end
         @salt
       end

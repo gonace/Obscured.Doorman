@@ -21,16 +21,17 @@ module Obscured
         field = params.delete(:field)
         error_data = params.delete(:error_data)
 
-        super(parse_error_code(code,params))
+        super(parse_error_code(code, params))
         @code = code || :unspecified_error
         @field = field || :unspecified_field
         @error_data = error_data
       end
 
       private
+
       def parse_error_code(code, params = {})
         message = @errors[code]
-        params.each_pair do |key,value|
+        params.each_pair do |key, value|
           message = message.sub("{#{key}}", value)
         end
         message
@@ -54,12 +55,12 @@ module Obscured
 
       def initialize(attempts_left)
         @attempts_left = attempts_left
-        super(:invalid_password, error_data: {attempts_left: attempts_left})
+        super(:invalid_password, error_data: { attempts_left: attempts_left })
       end
     end
 
     class InvalidFieldError < ArgumentError
-      attr :field
+      attr_reader :field
 
       def initialize(field, message = nil)
         @field = field

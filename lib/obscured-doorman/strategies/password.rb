@@ -4,12 +4,15 @@ module Obscured
       class Password < Warden::Strategies::Base
         def valid?
           params['user'] &&
-              params['user']['login'] &&
-              params['user']['password']
+            params['user']['login'] &&
+            params['user']['password']
         end
 
         def authenticate!
-          user = User.authenticate(params['user']['login'],params['user']['password'])
+          user = User.authenticate(
+            params['user']['login'],
+            params['user']['password']
+          )
 
           if user.nil?
             fail!(Obscured::Doorman::MESSAGES[:login_bad_credentials])

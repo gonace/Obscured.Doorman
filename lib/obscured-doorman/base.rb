@@ -13,7 +13,8 @@ module Obscured
 
     module Base
       module Helpers
-        # Generates a flash message by trying to fetch a default message, if that fails just pass the message
+        # Generates a flash message by trying to fetch a default message,
+        # if that fails just pass the message
         def notify(type, message)
           message = Obscured::Doorman::MESSAGES[message] if message.is_a?(Symbol)
           flash[type] = message
@@ -79,10 +80,11 @@ module Obscured
           end
 
           begin
-            user = User.make(username: params[:user][:login], 
+            user = User.make(username: params[:user][:login],
                              password: params[:user][:password],
                              confirmed: !Obscured::Doorman.configuration.confirmation)
-            user.set_name(params[:user][:first_name], params[:user][:last_name])
+            user.name = { first_name: params[:user][:first_name],
+                          last_name: params[:user][:last_name] }
             user.save
           rescue => e
             notify :error, e.message
@@ -90,11 +92,16 @@ module Obscured
           end
 
           notify :success, :signup_success
+
+          template = haml :'/templates/account_activation', layout: false, locals: {
+            user: user.username,
+            link: token_link('confirm', user)
+          }
           Obscured::Doorman::Mailer.new(
             to: user.username,
             subject: 'Account activation request',
             text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
-            html: (haml :'/templates/account_activation', locals: { user: user.username, link: token_link('confirm', user) }, layout: false)
+            html: template
           ).deliver!
 
           redirect "/doorman/login?email=#{user.username}"
@@ -105,16 +112,22 @@ module Obscured
 
           if params[:token].nil? || params[:token].empty?
             notify :error, :confirm_no_token
-            redirect '/'
+            redirect back
           end
 
-          user = User.where(confirm_token: params[:token]).first
+          token = Token.where(token: params[:token]).first
+          if token.nil?
+            notify :error, :confirm_no_token
+            redirect Obscured::Doorman.config.paths[:login]
+          end
+          user = token&.user
           if user.nil?
             notify :error, :confirm_no_user
-          else
-            user.confirm_email!
-            notify :success, :confirm_success
+            redirect Obscured::Doorman.config.paths[:login]
           end
+
+          user&.confirm!
+          notify :success, :confirm_success
           redirect Obscured::Doorman.configuration.paths[:login]
         end
 

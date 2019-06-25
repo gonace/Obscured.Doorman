@@ -20,14 +20,14 @@ module Obscured
               email = params[:email] rescue ''
             end
 
-            haml :forgot, :locals => {:email => email}
+            haml :forgot, locals: { email: email }
           end
 
           app.post '/doorman/forgot' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 
-            user = User.get_by_username(params['user']['login'])
+            user = User.where(username: params['user']['login']).first
             if user.nil?
               notify :error, :forgot_no_user
               redirect back
@@ -38,12 +38,17 @@ module Obscured
             end
 
             user.forgot_password!
-            Obscured::Doorman::Mailer.new({
+
+            template = haml :'/templates/password_reset', layout: false, locals: {
+              user: user.username,
+              link: token_link('reset', user)
+            }
+            Obscured::Doorman::Mailer.new(
               to: user.username,
               subject: 'Password change request',
               text: "We have received a password change request for your account (#{user.username}). " + token_link('reset', user),
-              html: (haml :'/templates/password_reset', :locals => {:user => user.username, :link => token_link('reset', user)}, :layout => false)
-            }).deliver!
+              html: template
+            ).deliver!
 
             notify :success, :forgot_success
             redirect Obscured::Doorman.configuration.paths[:login]
@@ -57,20 +62,20 @@ module Obscured
               redirect '/'
             end
 
-            user = User.where({:confirm_token => params[:token]}).first
+            user = User.where(confirm_token: params[:token]).first
             if user.nil?
               notify :error, :reset_no_user
               redirect Obscured::Doorman.configuration.paths[:login]
             end
 
-            haml :reset, :locals => { :token => user.confirm_token, :email => user.username }
+            haml :reset, locals: { token: user.confirm_token, email: user.username }
           end
 
           app.post '/doorman/reset' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 
-            user = User.where({:confirm_token => params[:user][:token]}).first rescue nil
+            user = User.where({confirm_token: params[:user][:token]}).first rescue nil
             if user.nil?
               notify :error, :reset_no_user
               redirect Obscured::Doorman.configuration.paths[:login]
@@ -85,20 +90,27 @@ module Obscured
               params['user']['token']
             )
 
-            unless success
-              notify :error, :reset_unmatched_passwords
-              redirect back
-            else
-              geo_position = Geocoder.search(request.ip)
-              Obscured::Doorman::Mailer.new({
+            if success
+              position = Geocoder.search(request.ip)
+              template = haml :'/templates/password_confirmation', layout: false, locals: {
+                user: user.username,
+                browser: "#{request&.browser} #{request&.browser_version}",
+                location: "#{position&.first&.city},#{position&.first&.country}",
+                ip: request&.ip,
+                system: "#{request&.os} #{request&.os_version}"
+              }
+              Obscured::Doorman::Mailer.new(
                 to: user.username,
                 subject: 'Password change confirmation',
                 text: "The password for your account (#{user.username}) was recently changed. This change was made from the following device or browser from: ",
-                html: (haml :'/templates/password_confirmation', :locals => {:user => user.username, :browser => "#{request.browser rescue nil} #{request.browser_version rescue nil}", :location => "#{geo_position.first.city rescue ''},#{geo_position.first.country rescue ''}", :ip => request.ip, :system => "#{request.os rescue nil} #{request.os_version rescue nil}"}, :layout => false)
-              }).deliver!
+                html: template
+              ).deliver!
+            else
+              notify :error, :reset_unmatched_passwords
+              redirect back
             end
 
-            user.confirm_email!
+            user.confirm!
             warden.set_user(user)
             notify :success, :reset_success
             redirect Obscured::Doorman.configuration.use_referrer && session[:return_to] ? session.delete(:return_to) : Obscured::Doorman.configuration.paths[:success]
