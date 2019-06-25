@@ -1,0 +1,28 @@
+version: "2"
+checks:
+  complex-logic:
+    config:
+      threshold: 10
+  method-lines:
+    config:
+      threshold: 250
+  similar-code:
+    enabled: false
+plugins:
+  rubocop:
+    enabled: true
+    channel: rubocop-0-71
+    checks:
+      Rubocop/Metrics/ClassLength:
+        enabled: false
+      Rubocop/Metrics/MethodLength:
+        enabled: false
+  coffeelint:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+exclude_patterns:
+- "tests/"
+- "spec/"
