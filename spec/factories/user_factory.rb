@@ -1,7 +1,7 @@
 FactoryBot.define do
-  factory :user, :class => Obscured::Doorman::User do
+  factory :user, class: Obscured::Doorman::User do
     username { 'homer.simpson@obscured.se' }
-    password { 'password123' }
+    password { BCrypt::Password.create('Password123') }
     first_name { 'Homer' }
     last_name { 'Simpson' }
     mobile { '+467855568' }

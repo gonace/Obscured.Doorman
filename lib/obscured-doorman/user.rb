@@ -31,6 +31,10 @@ module Obscured
           user = new
           user.username = opts[:username]
           user.password = BCrypt::Password.create(opts[:password])
+          user.first_name = opts[:first_name] unless opts[:first_name].nil?
+          user.last_name = opts[:last_name] unless opts[:last_name].nil?
+          user.mobile = opts[:mobile] unless opts[:mobile].nil?
+          user.role = opts[:role] unless opts[:role].nil?
           user.confirmed = opts[:confirmed] unless opts[:confirmed].nil?
           user
         end
@@ -43,7 +47,7 @@ module Obscured
 
         def authenticate(username, password)
           user = find_by(username: username)
-          user if user&.authenticated?(password)
+          return user if user&.authenticated?(password)
           nil
         end
       end
@@ -58,13 +62,14 @@ module Obscured
         self.last_name = arguments[:last_name]
       end
 
-      def password?(password)
-        self.password = Password.create(password)
+      def password=(password)
+        self.password = BCrypt::Password.create(password)
       end
 
       def authenticated?(password)
-        password == Password.new(self.password)
+        BCrypt::Password.new(self.password) == password ? true : false
       end
+      alias password? authenticated?
 
       def remember_me!
         Obscured::Doorman::Token.make!(
@@ -102,7 +107,7 @@ module Obscured
       def reset_password!(password, token)
         token = tokens.where(token: token)
         unless token
-          self.password = Password.create(password)
+          self.password = BCrypt::Password.create(password)
           save
         end
         false
