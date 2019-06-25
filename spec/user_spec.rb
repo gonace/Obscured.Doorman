@@ -59,7 +59,7 @@ describe Obscured::Doorman::User do
       expect(user.authenticated?('Password123')).to eq(true)
     end
     it 'return false if faulty password is provided' do
-      expect(user.password?('123Password')).to eq(true)
+      expect(user.password?('123Password')).to eq(false)
     end
   end
 end

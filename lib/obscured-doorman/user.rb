@@ -62,7 +62,7 @@ module Obscured
         self.last_name = arguments[:last_name]
       end
 
-      def password=(password)
+      def set_password(password)
         self.password = BCrypt::Password.create(password)
       end
 
