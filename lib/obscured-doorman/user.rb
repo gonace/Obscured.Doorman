@@ -3,7 +3,6 @@ module Obscured
     class User
       include Mongoid::Document
       include Mongoid::Timestamps
-      include BCrypt
 
       store_in database: Obscured::Doorman.configuration.db_name,
                client: Obscured::Doorman.configuration.db_client,
@@ -30,7 +29,7 @@ module Obscured
 
           user = new
           user.username = opts[:username]
-          user.password = BCrypt::Password.create(opts[:password])
+          user.set_password(opts[:password])
           user.first_name = opts[:first_name] unless opts[:first_name].nil?
           user.last_name = opts[:last_name] unless opts[:last_name].nil?
           user.mobile = opts[:mobile] unless opts[:mobile].nil?
@@ -107,7 +106,7 @@ module Obscured
       def reset_password!(password, token)
         token = tokens.where(token: token)
         unless token
-          self.password = BCrypt::Password.create(password)
+          self.set_password(password)
           save
         end
         false
