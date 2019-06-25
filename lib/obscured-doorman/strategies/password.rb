@@ -12,9 +12,9 @@ module Obscured
           user = User.authenticate(params['user']['login'],params['user']['password'])
 
           if user.nil?
-            fail!(Obscured::Doorman::Messages[:login_bad_credentials])
+            fail!(Obscured::Doorman::MESSAGES[:login_bad_credentials])
           elsif !user.confirmed
-            fail!(Obscured::Doorman::Messages[:login_not_confirmed])
+            fail!(Obscured::Doorman::MESSAGES[:login_not_confirmed])
           else
             success!(user)
           end

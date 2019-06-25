@@ -12,7 +12,7 @@ module Obscured
             end
           end
 
-          app.get '/doorman/forgot/?' do
+          app.get '/obscured-doorman/forgot/?' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
 
             email = cookies[:email]
@@ -23,7 +23,7 @@ module Obscured
             haml :forgot, :locals => {:email => email}
           end
 
-          app.post '/doorman/forgot' do
+          app.post '/obscured-doorman/forgot' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 
@@ -49,7 +49,7 @@ module Obscured
             redirect Obscured::Doorman.configuration.paths[:login]
           end
 
-          app.get '/doorman/reset/:token/?' do
+          app.get '/obscured-doorman/reset/:token/?' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
 
             if params[:token].nil? || params[:token].empty?
@@ -66,7 +66,7 @@ module Obscured
             haml :reset, :locals => { :confirm_token => user.confirm_token, :email => user.username }
           end
 
-          app.post '/doorman/reset' do
+          app.post '/obscured-doorman/reset' do
             redirect Obscured::Doorman.configuration.paths[:success] if authenticated?
             redirect '/' unless params['user']
 

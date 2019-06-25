@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    doorman (1.5.0)
+    obscured-doorman (1.5.0)
       geocoder
       haml
       mail
@@ -104,7 +104,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  doorman!
+  obscured-doorman!
   rspec
   simplecov
 

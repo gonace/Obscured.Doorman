@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
+$LOAD_PATH.unshift File.dirname(__FILE__)
 require 'factory_bot'
 require 'pp'
 require 'rspec'
 require 'simplecov'
 
-SimpleCov.start do
-  add_filter '/spec/'
-end
+SimpleCov.start
+
+# pull in the code
+Dir.glob('./lib/*.rb').sort.each(&method(:require))
 
 Mongoid.load!(File.join(File.dirname(__FILE__), '/config/mongoid.yml'), 'spec')
 Mongo::Logger.logger.level = Logger::ERROR

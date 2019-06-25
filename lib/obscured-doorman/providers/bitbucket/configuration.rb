@@ -18,8 +18,8 @@ module Obscured
               scopes:         'account',
               authorize_url:  'https://bitbucket.org/site/oauth2/authorize',
               token_url:      'https://bitbucket.org/site/oauth2/access_token',
-              login_url:      '/doorman/oauth2/bitbucket',
-              redirect_url:   '/doorman/oauth2/bitbucket/callback',
+              login_url:      '/obscured-doorman/oauth2/bitbucket',
+              redirect_url:   '/obscured-doorman/oauth2/bitbucket/callback',
               domains:        nil,
               token:          nil
             )

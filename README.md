@@ -21,7 +21,7 @@
 ## Installation
 1. Add this line to your application's Gemfile:
 ```ruby
-gem 'doorman', :git => 'git@github.com:gonace/Obscured.Doorman.git', :branch => 'master'
+gem 'obscured-doorman', :git => 'git@github.com:gonace/Obscured.Doorman.git', :branch => 'master'
 ```
 
 2. Execute:
@@ -31,7 +31,7 @@ $ bundle
 
 3. Require the library in your application:
 ```ruby
-require 'doorman'
+require 'obscured-doorman'
 ```
 
 ### Example
@@ -47,7 +47,6 @@ end
 ```
 
 ### Optional Configuration & Overrides
-
 ```ruby
 Obscured::Doorman.setup do |cfg|
   ...

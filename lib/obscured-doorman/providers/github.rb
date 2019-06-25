@@ -32,11 +32,11 @@ module Obscured
 
           Warden::Strategies.add(:github, GitHub::Strategy)
 
-          app.get '/doorman/oauth2/github' do
+          app.get '/obscured-doorman/oauth2/github' do
             redirect "#{GitHub.configuration[:authorize_url]}?client_id=#{GitHub.configuration[:client_id]}&response_type=code&scope=#{GitHub.configuration[:scopes]}"
           end
 
-          app.get '/doorman/oauth2/github/callback/?' do
+          app.get '/obscured-doorman/oauth2/github/callback/?' do
             begin
               response = RestClient::Request.new(
                 :method => :post,
@@ -63,7 +63,7 @@ module Obscured
               message = JSON.parse(e.response)
               Doorman.logger.error e
               notify :error, "#{message['error_description']} (#{message['error']})"
-              redirect '/doorman/login'
+              redirect '/obscured-doorman/login'
             ensure
               # Notify if there are any messages from Warden.
               unless warden.message.blank?

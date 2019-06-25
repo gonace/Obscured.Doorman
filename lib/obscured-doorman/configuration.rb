@@ -13,7 +13,7 @@ module Obscured
 
       def self.proc_config_option(name)
         define_method(name) do |&block|
-          set_value(name, block) unless block == nil
+          set_value(name, block) unless block.nil?
           read_value(name)
         end
 
@@ -66,25 +66,27 @@ module Obscured
 
         # set default attribute values
         @defaults = OpenStruct.new(
-          confirmation:       false,
-          registration:       false,
-          use_referrer:       true,
-          remember_cookie:    'sinatra.doorman.remember',
-          remember_for:       30,
-          db_name:            'doorman',
-          db_collection:      'users',
-          db_client:          :doorman,
-          smtp_domain:        'doorman.local',
-          smtp_server:        '127.0.0.1',
-          smtp_port:          587,
-          smtp_username:      nil,
-          smtp_password:      nil,
-          providers:          [],
-          paths:              {:success => '/home',
-                               :login => '/doorman/login',
-                               :logout => '/doorman/logout',
-                               :forgot => '/doorman/forgot',
-                               :reset => '/doorman/reset'}
+          confirmation: false,
+          registration: false,
+          use_referrer: true,
+          remember_cookie: 'sinatra.doorman.remember',
+          remember_for: 30,
+          db_name: 'doorman',
+          db_collection: 'users',
+          db_client: :'doorman',
+          smtp_domain: 'doorman.local',
+          smtp_server: '127.0.0.1',
+          smtp_port: 587,
+          smtp_username: nil,
+          smtp_password: nil,
+          providers: [],
+          paths: {
+            success: '/home',
+            login: '/doorman/login',
+            logout: '/doorman/logout',
+            forgot: '/doorman/forgot',
+            reset: '/doorman/reset'
+          }
         )
       end
 
@@ -97,10 +99,10 @@ module Obscured
       end
 
 
-
       private
+
       def read_value(name)
-        if @config_values.has_key?(name)
+        if @config_values.key?(name)
           @config_values[name]
         else
           @defaults.send(name)

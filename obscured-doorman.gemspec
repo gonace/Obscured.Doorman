@@ -2,10 +2,10 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'doorman/version'
+require 'obscured-doorman/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'doorman'
+  gem.name          = 'obscured-doorman'
   gem.version       = Obscured::Doorman::VERSION
   gem.authors       = ['Erik Hennerfors']
   gem.email         = ['erik.hennerfors@obscured.se']

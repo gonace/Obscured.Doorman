@@ -3,12 +3,12 @@ require File.expand_path('../messages', __FILE__)
 module Obscured
   module Doorman
     module Providers
-      module GitHub
+      module Bitbucket
         class Strategy < Warden::Strategies::Base
           def valid?
-            emails = GitHub.configuration[:token].emails
+            emails = Bitbucket.configuration[:token].emails
 
-            unless GitHub.configuration.domains.nil?
+            unless Bitbucket.configuration.domains.nil?
               if valid_domain!
                 return true
               end
@@ -18,27 +18,26 @@ module Obscured
               end
             end
 
-            fail!(GitHub::Messages[:invalid_domain])
+            fail!(Bitbucket::Messages[:invalid_domain])
             return false
           end
 
           def authenticate!
-            user = Obscured::Doorman::User.where(:username.in => GitHub.configuration[:token].emails).first
+            user = Obscured::Doorman::User.where(:username.in => Bitbucket.configuration[:token].emails).first
 
             if user.nil?
-              fail!(Obscured::Doorman::Messages[:login_bad_credentials])
+              fail!(Obscured::Doorman::MESSAGES[:login_bad_credentials])
             elsif !user.confirmed
-              fail!(Obscured::Doorman::Messages[:login_not_confirmed])
+              fail!(Obscured::Doorman::MESSAGES[:login_not_confirmed])
             else
               success!(user)
             end
           end
 
           private
-
           def valid_domain!
-            emails = GitHub.configuration[:token].emails || []
-            domains = GitHub.configuration.domains.split(',')
+            emails = Bitbucket.configuration[:token].emails || []
+            domains = Bitbucket.configuration.domains.split(',')
 
             emails.each do |email|
               unless domains.detect { |domain| email.end_with?(domain) } == nil

@@ -5,19 +5,19 @@ module Obscured
       attr_reader :field
       attr_reader :error_data
 
-      @@errors = {
-        :invalid_api_method => 'No method parameter was supplied',
-        :unspecified_error => 'Unspecified error',
-        :already_exists => '{what}',
-        :does_not_exist => '{what}',
-        :does_not_match => '{what}',
-        :invalid_date => 'Cannot parse {what} from: {date}',
-        :invalid_type => '{what}',
-        :not_active => 'Not active',
-        :required_field_missing => 'Required field {field} is missing'
+      @errors = {
+        invalid_api_method: 'No method parameter was supplied',
+        unspecified_error: 'Unspecified error',
+        already_exists: '{what}',
+        does_not_exist: '{what}',
+        does_not_match: '{what}',
+        invalid_date: 'Cannot parse {what} from: {date}',
+        invalid_type: '{what}',
+        not_active: 'Not active',
+        required_field_missing: 'Required field {field} is missing'
       }
 
-      def initialize(code, params={})
+      def initialize(code, params = {})
         field = params.delete(:field)
         error_data = params.delete(:error_data)
 
@@ -28,10 +28,10 @@ module Obscured
       end
 
       private
-      def parse_error_code(code, params={})
-        message = @@errors[code]
+      def parse_error_code(code, params = {})
+        message = @errors[code]
         params.each_pair do |key,value|
-          message = message.sub("{#{key.to_s}}", value)
+          message = message.sub("{#{key}}", value)
         end
         message
       end
@@ -39,7 +39,7 @@ module Obscured
 
     class AccountNotFoundError < Error
       def initialize
-        super(:invalid_account, :what => 'Could not find account')
+        super(:invalid_account, what: 'Could not find account')
       end
     end
 
@@ -54,14 +54,14 @@ module Obscured
 
       def initialize(attempts_left)
         @attempts_left = attempts_left
-        super(:invalid_password, :error_data => {:attempts_left => attempts_left})
+        super(:invalid_password, error_data: {attempts_left: attempts_left})
       end
     end
 
     class InvalidFieldError < ArgumentError
       attr :field
 
-      def initialize(field, message=nil)
+      def initialize(field, message = nil)
         @field = field
         super(message || "Invalid value for field #{field}.")
       end

@@ -18,8 +18,8 @@ module Obscured
               scopes:         'user:email',
               authorize_url:  'https://github.com/login/oauth/authorize',
               token_url:      'https://github.com/login/oauth/access_token',
-              login_url:      '/doorman/oauth2/github',
-              redirect_url:   '/doorman/oauth2/github/callback',
+              login_url:      '/obscured-doorman/oauth2/github',
+              redirect_url:   '/obscured-doorman/oauth2/github/callback',
               domains:        nil,
               token:          nil,
             )
