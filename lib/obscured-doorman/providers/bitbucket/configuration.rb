@@ -11,17 +11,17 @@ module Obscured
 
             # set default attribute values
             @defaults = OpenStruct.new(
-              provider:       Obscured::Doorman::Providers::Bitbucket,
-              enabled:        false,
-              client_id:      nil,
-              client_secret:  nil,
-              scopes:         'account',
-              authorize_url:  'https://bitbucket.org/site/oauth2/authorize',
-              token_url:      'https://bitbucket.org/site/oauth2/access_token',
-              login_url:      '/doorman/oauth2/bitbucket',
-              redirect_url:   '/doorman/oauth2/bitbucket/callback',
-              domains:        nil,
-              token:          nil
+              provider: Obscured::Doorman::Providers::Bitbucket,
+              enabled: false,
+              client_id: nil,
+              client_secret: nil,
+              scopes: 'account',
+              authorize_url: 'https://bitbucket.org/site/oauth2/authorize',
+              token_url: 'https://bitbucket.org/site/oauth2/access_token',
+              login_url: '/doorman/oauth2/bitbucket',
+              redirect_url: '/doorman/oauth2/bitbucket/callback',
+              domains: [],
+              token: nil
             )
           end
         end

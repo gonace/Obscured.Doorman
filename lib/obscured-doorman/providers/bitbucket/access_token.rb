@@ -10,12 +10,12 @@ module Obscured
           attr_accessor :expires_date
           attr_accessor :emails
 
-          def initialize(attributes={})
+          def initialize(attributes = {})
             @access_token = attributes[:access_token]
             @refresh_token = attributes[:refresh_token]
             @scopes = attributes[:scopes]
             @expires_in = attributes[:expires_in]
-            @expires_date = DateTime.now + self.expires_in.to_i.seconds
+            @expires_date = DateTime.now + expires_in.to_i.seconds
             @emails = attributes[:emails]
           end
         end

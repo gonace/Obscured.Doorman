@@ -8,7 +8,7 @@ module Obscured
           attr_accessor :scope
           attr_accessor :emails
 
-          def initialize(attributes={})
+          def initialize(attributes = {})
             @access_token = attributes[:access_token]
             @token_type = attributes[:token_type]
             @scopes = attributes[:scopes]
