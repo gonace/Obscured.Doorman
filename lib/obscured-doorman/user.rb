@@ -52,6 +52,10 @@ module Obscured
 
           nil
         end
+
+        def registered?(username)
+          where(username: username).exists?
+        end
       end
 
 

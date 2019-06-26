@@ -3,9 +3,9 @@ module Obscured
     class Error < StandardError
       attr_reader :code
       attr_reader :field
-      attr_reader :error_data
+      attr_reader :error
 
-      @errors = {
+      ERRORS = {
         invalid_api_method: 'No method parameter was supplied',
         unspecified_error: 'Unspecified error',
         already_exists: '{what}',
@@ -15,22 +15,22 @@ module Obscured
         invalid_type: '{what}',
         not_active: 'Not active',
         required_field_missing: 'Required field {field} is missing'
-      }
+      }.freeze
 
       def initialize(code, params = {})
         field = params.delete(:field)
-        error_data = params.delete(:error_data)
+        error = params.delete(:error)
 
-        super(parse_error_code(code, params))
+        super(parse(code, params))
         @code = code || :unspecified_error
         @field = field || :unspecified_field
-        @error_data = error_data
+        @error = error
       end
 
       private
 
-      def parse_error_code(code, params = {})
-        message = @errors[code]
+      def parse(code, params = {})
+        message = ERRORS[code]
         params.each_pair do |key, value|
           message = message.sub("{#{key}}", value)
         end
@@ -55,7 +55,7 @@ module Obscured
 
       def initialize(attempts_left)
         @attempts_left = attempts_left
-        super(:invalid_password, error_data: { attempts_left: attempts_left })
+        super(:invalid_password, error: { attempts_left: attempts_left })
       end
     end
 

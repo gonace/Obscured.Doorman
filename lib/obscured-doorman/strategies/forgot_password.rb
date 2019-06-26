@@ -22,8 +22,8 @@ module Obscured
           end
 
           app.post '/doorman/forgot' do
-            redirect Doorman.configuration.paths[:success] if authenticated?
-            redirect '/' unless params[:user]
+            redirect(Doorman.configuration.paths[:success]) if authenticated?
+            redirect(Doorman.configuration.paths[:login]) unless params[:user]
 
             user = User.where(username: params[:user][:username]).first
             if user.nil?
@@ -58,7 +58,7 @@ module Obscured
 
             if params[:token].nil? || params[:token].empty?
               notify :error, :reset_no_token
-              redirect '/'
+              redirect(Doorman.configuration.paths[:login])
             end
 
             token = Token.where(token: params[:token]).first
@@ -77,8 +77,8 @@ module Obscured
           end
 
           app.post '/doorman/reset' do
-            redirect Doorman.configuration.paths[:success] if authenticated?
-            redirect '/' unless params[:user]
+            redirect(Doorman.configuration.paths[:success]) if authenticated?
+            redirect(Doorman.configuration.paths[:login]) unless params[:user]
 
             token = Token.where(token: params[:user][:token]).first
             if token.nil?
@@ -119,7 +119,7 @@ module Obscured
               ).deliver!
             else
               notify :error, :reset_unmatched_passwords
-              redirect back
+              redirect(Doorman.configuration.paths[:login])
             end
 
             user&.confirm!

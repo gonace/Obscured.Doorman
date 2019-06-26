@@ -29,7 +29,7 @@ module Obscured
 
           Warden::Manager.after_authentication do |user, auth, _opts|
             if auth.winning_strategy.is_a?(Strategies::RememberMeStrategy) ||
-               (auth.winning_strategy.is_a?(Strategies::Password) && auth.params[:user][:remember_me])
+               (auth.winning_strategy.is_a?(Strategies::Password) && auth.params['user']['remember_me'])
 
               token = user.tokens.where(type: :remember).first
               user.remember_me! # new token

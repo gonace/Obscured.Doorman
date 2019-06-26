@@ -3,8 +3,11 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'factory_bot'
 require 'pp'
+require 'rack/test'
 require 'rspec'
 require 'simplecov'
+
+require 'obscured-doorman'
 
 SimpleCov.start
 
@@ -19,6 +22,7 @@ Mongo::Logger.logger.level = Logger::ERROR
 Obscured::Doorman.setup do |cfg|
   cfg.db_client = :default
   cfg.db_name = 'doorman_testing'
+  cfg.registration = true
 end
 
 RSpec.configure do |c|

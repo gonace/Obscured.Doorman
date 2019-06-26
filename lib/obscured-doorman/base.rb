@@ -80,29 +80,38 @@ module Obscured
           end
 
           begin
-            user = User.make(username: params[:user][:username],
-                             password: params[:user][:password])
-            user.name = { first_name: params[:user][:first_name], last_name: params[:user][:last_name] }
-            user.confirm! unless Doorman.configuration.confirmation
+            if User.registered?(params[:user][:username])
+              notify :error, :register_account_exists
+              redirect(Doorman.configuration.paths[:login])
+            end
+
+            user = User.make(
+              username: params[:user][:username],
+              password: params[:user][:password]
+            )
+            user.name = {
+              first_name: params[:user][:first_name],
+              last_name: params[:user][:last_name]
+            }
             user.save
+
+            template = haml :'/templates/account_activation', layout: false, locals: {
+              user: user.username,
+              link: token_link('confirm', user)
+            }
+            Doorman::Mailer.new(
+              to: user.username,
+              subject: 'Account activation request',
+              text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
+              html: template
+            ).deliver!
+
+            notify :success, :signup_success
+            redirect(Doorman.configuration.paths[:success])
           rescue => e
             notify :error, e.message
-            redirect(back)
+            redirect(Doorman.configuration.paths[:login])
           end
-
-          template = haml :'/templates/account_activation', layout: false, locals: {
-            user: user.username,
-            link: token_link('confirm', user)
-          }
-          Doorman::Mailer.new(
-            to: user.username,
-            subject: 'Account activation request',
-            text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
-            html: template
-          ).deliver!
-
-          notify :success, :signup_success
-          redirect("/doorman/login?email=#{user.username}")
         end
 
         app.get '/doorman/confirm/:token/?' do
@@ -116,7 +125,7 @@ module Obscured
           token = Token.where(token: params[:token]).first
           if token.nil?
             notify :error, :confirm_no_token
-            redirect(Doorman.config.paths[:login])
+            redirect(back)
           end
           user = token&.user
           if user.nil?
@@ -164,8 +173,8 @@ module Obscured
       helpers Sinatra::Cookies
       register Sinatra::Flash
       register Sinatra::Partial
-      register Strategies::RememberMe
       register Strategies::ForgotPassword
+      register Strategies::RememberMe
       register Doorman::Base
       register Doorman::Providers::Bitbucket
       register Doorman::Providers::GitHub

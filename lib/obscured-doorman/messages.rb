@@ -18,7 +18,9 @@ module Obscured
       reset_no_user: 'Invalid reset URL. Please make sure you have the correct link from the email, and have already reset the password.',
       reset_system_user: 'Your trying to reset the password of a system user, unfortunate for you, this action is not allowed',
       reset_unmatched_passwords: 'Password and confirmation do not match. Please try again.',
-      reset_success: 'Your password has been reset.'
+      reset_success: 'Your password has been reset.',
+      # Registration
+      register_account_exists: 'Account already registered.'
     }.freeze
   end
 end

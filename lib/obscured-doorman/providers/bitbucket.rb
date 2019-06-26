@@ -67,7 +67,7 @@ module Obscured
             message = JSON.parse(e.response)
             Doorman.logger.error e
             notify :error, "#{message['error_description']} (#{message['error']})"
-            redirect '/doorman/login'
+            redirect(Doorman.configuration.paths[:login])
           ensure
             # Notify if there are any messages from Warden.
             notify :error, warden.message unless warden.message.blank?
