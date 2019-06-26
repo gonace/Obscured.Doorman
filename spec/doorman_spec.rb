@@ -80,6 +80,24 @@ describe Obscured::Doorman::Base do
     end
   end
 
+  describe 'confirm' do
+    def do_confirm(token)
+      get "/doorman/confirm/#{token}"
+    end
+
+    let!(:token) { FactoryBot.create(:token, type: :confirm, user: user) }
+
+    context 'successful' do
+      before(:each) {
+        do_confirm(token.token)
+      }
+
+      it 'does something?' do
+        expect(last_response).to eq(302)
+      end
+    end
+  end
+
   describe 'forget' do
     def do_forget(overrides = {})
       cmd = {}

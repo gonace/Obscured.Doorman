@@ -86,12 +86,13 @@ module Obscured
       end
 
       def forget_me!
-        Doorman::Token.where(user_id: id, type: :remember).destroy
+        #Doorman::Token.where(user_id: id, type: :remember).destroy
+        tokens.where(type: :remember).destroy
       end
 
       def confirm!
         self.confirmed = true
-        tokens.delete(type: :confirm)
+        tokens.where(type: :confirm).destroy
         save
       end
 
@@ -105,7 +106,8 @@ module Obscured
       end
 
       def remembered_password!
-        Doorman::Token.where(user_id: id, type: :password).destroy
+        #Doorman::Token.where(user_id: id, type: :password).destroy
+        tokens.where(type: :password).destroy
       end
 
       def reset_password!(password, token)

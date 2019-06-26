@@ -22,7 +22,8 @@ module Obscured
 
         # Generates a url for confirm account or reset password
         def token_link(type, user)
-          "http://#{env['HTTP_HOST']}/doorman/#{type}/#{user.confirm_token}"
+          token = Token.where(username: user.username, type: type).first
+          "http://#{env['HTTP_HOST']}/doorman/#{type}/#{token}"
         end
       end
 
@@ -131,7 +132,7 @@ module Obscured
           end
 
           token = Token.where(token: params[:token]).first
-          if token.nil?
+          if token.nil? && !token&.type.eql?(:confirm)
             notify :error, :confirm_no_token
             redirect(back)
           end
