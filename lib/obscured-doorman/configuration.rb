@@ -109,7 +109,8 @@ module Obscured
             login: '/doorman/login',
             logout: '/doorman/logout',
             forgot: '/doorman/forgot',
-            reset: '/doorman/reset'
+            reset: '/doorman/reset',
+            register: '/doorman/register'
           }
         )
       end
