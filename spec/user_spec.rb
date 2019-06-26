@@ -126,6 +126,10 @@ describe Obscured::Doorman::User do
       expect(token).to_not be(nil)
     end
 
+    it 'returns false if token is not found' do
+      expect(user.reset_password!('morotskaka123', 'boogus')).to be(false)
+    end
+
     it 'removes token if user was successfully signed in' do
       expect(user.remembered_password!).to be(1)
       expect(Obscured::Doorman::Token.where(type: :password).count).to be(0)

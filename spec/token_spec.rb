@@ -13,7 +13,7 @@ describe Obscured::Doorman::Token do
   context 'make' do
     let!(:token) { Obscured::Doorman::Token.make(user: user, type: :password, token: sha) }
 
-    it 'returns an unsaved document' do
+    it 'returns an unsaved token with values' do
       expect(token).to_not be_nil
       expect(token.token).to eq(sha)
       expect(token.persisted?).to be(false)
@@ -23,15 +23,23 @@ describe Obscured::Doorman::Token do
   context 'make!' do
     let!(:token) { Obscured::Doorman::Token.make!(user: user, type: :password, token: sha) }
 
-    context 'without tags' do
-      it 'returns an saved document' do
-        expect(token).to_not be_nil
-        expect(token.token).to eq(sha)
-        expect(token.type).to eq(:password)
-        expect(token.used_at).to eq(nil)
-        expect(token.user_id).to_not eq(nil)
-        expect(token.persisted?).to be(true)
-      end
+    it 'returns an saved token with values' do
+      expect(token).to_not be_nil
+      expect(token.token).to eq(sha)
+      expect(token.type).to eq(:password)
+      expect(token.used_at).to eq(nil)
+      expect(token.user_id).to_not eq(nil)
+      expect(token.persisted?).to be(true)
+    end
+  end
+
+  context 'use!' do
+    let!(:token) { Obscured::Doorman::Token.make!(user: user, type: :password, token: sha) }
+
+    before(:each) { token.use! }
+
+    it 'sets the token as used' do
+      expect(token.used_at).to_not be(nil)
     end
   end
 end

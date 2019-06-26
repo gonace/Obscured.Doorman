@@ -2,19 +2,22 @@
 
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'factory_bot'
+require 'mongoid'
 require 'pp'
 require 'rack/test'
 require 'rspec'
 require 'simplecov'
 
-require 'obscured-doorman'
+require_relative '../lib/obscured-doorman'
 
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/'
+end
 
 # pull in the code
 Dir.glob('./spec/helpers/*.rb').sort.each(&method(:require))
 Dir.glob('./spec/matchers/*.rb').sort.each(&method(:require))
-Dir.glob('./lib/*.rb').sort.each(&method(:require))
+#Dir.glob('../lib/*.rb').sort.each(&method(:require))
 
 Mongoid.load!(File.join(File.dirname(__FILE__), '/config/mongoid.yml'), 'spec')
 Mongo::Logger.logger.level = Logger::ERROR
@@ -26,13 +29,14 @@ Obscured::Doorman.setup do |cfg|
 end
 
 RSpec.configure do |c|
+  c.order = :random
+  c.filter_run :focus
+  c.run_all_when_everything_filtered = true
+
   c.include FactoryBot::Syntax::Methods
   c.include Obscured::Doorman::Spec::Helpers
   c.include Warden::Test::Helpers
   c.include Warden::Test::Mock
-
-  c.filter_run_excluding integration: true
-  c.filter_run_excluding broken: true
 
   c.before(:suite) do
     FactoryBot.find_definitions

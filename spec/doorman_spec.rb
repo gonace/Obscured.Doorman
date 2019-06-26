@@ -90,10 +90,13 @@ describe Obscured::Doorman::Base do
     context 'successful' do
       before(:each) {
         do_confirm(token.token)
+
+        user.reload
       }
 
-      it 'does something?' do
-        expect(last_response).to eq(302)
+      it 'confirms user and removes token' do
+        expect(last_response.status).to eq(302)
+        expect(user.tokens.where(type: :confirm).count).to eq(0)
       end
     end
   end
