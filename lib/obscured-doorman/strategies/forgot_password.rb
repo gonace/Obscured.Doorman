@@ -37,16 +37,18 @@ module Obscured
 
               user.forgot_password!
 
-              template = haml :'/templates/password_reset', layout: false, locals: {
-                user: user.username,
-                link: token_link('reset', user)
-              }
-              Doorman::Mailer.new(
-                to: user.username,
-                subject: 'Password change request',
-                text: "We have received a password change request for your account (#{user.username}). " + token_link('reset', user),
-                html: template
-              ).deliver!
+              if File.exist?('/templates/password_reset')
+                template = haml :'/templates/password_reset', layout: false, locals: {
+                  user: user.username,
+                  link: token_link('reset', user)
+                }
+                Doorman::Mailer.new(
+                  to: user.username,
+                  subject: 'Password change request',
+                  text: "We have received a password change request for your account (#{user.username}). " + token_link('reset', user),
+                  html: template
+                ).deliver!
+              end
 
               notify :success, :forgot_success
               redirect(Doorman.configuration.paths[:login])
@@ -102,7 +104,7 @@ module Obscured
               params[:user][:token]
             )
 
-            if success
+            if success && File.exist?('/templates/password_confirmation')
               position = Geocoder.search(request.ip)
               template = haml :'/templates/password_confirmation', layout: false, locals: {
                 user: user&.username,

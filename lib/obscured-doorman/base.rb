@@ -54,6 +54,12 @@ module Obscured
         end
         Warden::Strategies.add(:password, Doorman::Strategies::Password)
 
+        app.post '/doorman/unauthenticated' do
+          status 401
+          session[:return_to] = env['warden.options'][:attempted_path] if session[:return_to].nil?
+          redirect(Doorman.configuration.paths[:login])
+        end
+
         app.get '/doorman/register/?' do
           redirect(Doorman.configuration.paths[:success]) if authenticated?
 
@@ -63,12 +69,6 @@ module Obscured
           end
 
           haml :register
-        end
-
-        app.post '/doorman/unauthenticated' do
-          status 401
-          session[:return_to] = env['warden.options'][:attempted_path] if session[:return_to].nil?
-          redirect(Doorman.configuration.paths[:login])
         end
 
         app.post '/doorman/register' do
@@ -95,16 +95,24 @@ module Obscured
             }
             user.save
 
-            template = haml :'/templates/account_activation', layout: false, locals: {
-              user: user.username,
-              link: token_link('confirm', user)
-            }
-            Doorman::Mailer.new(
-              to: user.username,
-              subject: 'Account activation request',
-              text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
-              html: template
-            ).deliver!
+            if File.exist?('/templates/account_activation')
+              template = haml :'/templates/account_activation', layout: false, locals: {
+                user: user.username,
+                link: token_link('confirm', user)
+              }
+              Doorman::Mailer.new(
+                to: user.username,
+                subject: 'Account activation request',
+                text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
+                html: template
+              ).deliver!
+            end
+
+            # Login when registration is completed
+            warden.authenticate(:password)
+
+            # Set cookie
+            cookies[:email] = params[:user][:username]
 
             notify :success, :signup_success
             redirect(Doorman.configuration.paths[:success])

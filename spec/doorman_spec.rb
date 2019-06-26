@@ -85,12 +85,17 @@ describe Obscured::Doorman::Base do
       cmd = {}
       cmd[:user] = {}
       cmd[:user][:username] = overrides[:username] if overrides[:username]
-      cmd[:user][:password] = overrides[:password] if overrides[:password]
       post '/doorman/forget', cmd
     end
   end
 
   describe 'reset' do
-
+    def do_reset(overrides = {})
+      cmd = {}
+      cmd[:user] = {}
+      cmd[:user][:username] = overrides[:username] if overrides[:username]
+      cmd[:user][:token] = overrides[:token] if overrides[:token]
+      post '/doorman/reset', cmd
+    end
   end
 end
