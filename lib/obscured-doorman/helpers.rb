@@ -45,8 +45,8 @@ module Obscured
       # @param [String] failure_path path to redirect to if user is unauthenticated
       def authorize!(failure_path = nil)
         unless authenticated?
-          session[:return_to] = request.path if Obscured::Doorman.configuration.use_referrer
-          redirect(failure_path || Obscured::Doorman.configuration.paths[:login])
+          session[:return_to] = request.path if Doorman.configuration.use_referrer
+          redirect(failure_path || Doorman.configuration.paths[:login])
         end
       end
 

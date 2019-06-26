@@ -3,7 +3,7 @@ module Obscured
     class Mailer
       def initialize(opts = {})
         @to = opts[:to]
-        @from = "doorman@#{Obscured::Doorman.configuration.smtp_domain}"
+        @from = "doorman@#{Doorman.configuration.smtp_domain}"
         @subject = opts[:subject]
 
         @text = opts[:text]
@@ -11,16 +11,16 @@ module Obscured
       end
 
       def deliver!
-        Obscured.logger.debug "Sending mail to #{@to}, from: #{@from}, with subject: #{@subject}"
+        Doorman.logger.debug "Sending mail to #{@to}, from: #{@from}, with subject: #{@subject}"
         mail = Mail.new(to: @to, from: @from, subject: @subject) do
           delivery_method :smtp,
-                          address: Obscured::Doorman.configuration.smtp_server,
-                          port: Obscured::Doorman.configuration.smtp_port,
-                          domain: Obscured::Doorman.configuration.smtp_domain,
+                          address: Doorman.configuration.smtp_server,
+                          port: Doorman.configuration.smtp_port,
+                          domain: Doorman.configuration.smtp_domain,
                           enable_starttls_auto: true,
                           authentication: :plain,
-                          user_name: Obscured::Doorman.configuration.smtp_username,
-                          password: Obscured::Doorman.configuration.smtp_password
+                          user_name: Doorman.configuration.smtp_username,
+                          password: Doorman.configuration.smtp_password
         end
 
         unless @text.blank?
@@ -37,7 +37,7 @@ module Obscured
 
         mail.deliver
       rescue => e
-        Obscured.logger.error e
+        Doorman.logger.error e
       end
     end
   end

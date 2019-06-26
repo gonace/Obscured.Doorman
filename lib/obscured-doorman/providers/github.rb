@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require File.expand_path('../github/configuration', __FILE__)
-require File.expand_path('../github/messages', __FILE__)
-require File.expand_path('../github/access_token', __FILE__)
-require File.expand_path('../github/strategy', __FILE__)
+require File.expand_path('github/configuration', __dir__)
+require File.expand_path('github/messages', __dir__)
+require File.expand_path('github/access_token', __dir__)
+require File.expand_path('github/strategy', __dir__)
 
 
 module Obscured
@@ -29,8 +29,8 @@ module Obscured
 
 
         def self.registered(app)
-          app.helpers Obscured::Doorman::Base::Helpers
-          app.helpers Obscured::Doorman::Helpers
+          app.helpers Doorman::Base::Helpers
+          app.helpers Doorman::Helpers
 
           Warden::Strategies.add(:github, GitHub::Strategy)
 
@@ -69,10 +69,9 @@ module Obscured
             redirect '/doorman/login'
           ensure
             # Notify if there are any messages from Warden.
-            unless warden.message.blank?
-              notify :error, warden.message
-            end
-            redirect Obscured::Doorman.configuration.use_referrer && session[:return_to] ? session.delete(:return_to) : Obscured::Doorman.configuration.paths[:success]
+            notify :error, warden.message unless warden.message.blank?
+
+            redirect(Doorman.configuration.use_referrer && session[:return_to] ? session.delete(:return_to) : Doorman.configuration.paths[:success])
           end
         end
       end

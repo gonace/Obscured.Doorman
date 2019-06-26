@@ -51,8 +51,8 @@ module Obscured
         end
 
 
-
         private
+
         def read_value(name)
           if @config_values.has_key?(name)
             @config_values[name]

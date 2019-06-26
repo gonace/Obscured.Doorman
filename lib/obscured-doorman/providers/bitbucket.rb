@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require File.expand_path('../bitbucket/configuration', __FILE__)
-require File.expand_path('../bitbucket/messages', __FILE__)
-require File.expand_path('../bitbucket/access_token', __FILE__)
-require File.expand_path('../bitbucket/strategy', __FILE__)
+require File.expand_path('bitbucket/configuration', __dir__)
+require File.expand_path('bitbucket/messages', __dir__)
+require File.expand_path('bitbucket/access_token', __dir__)
+require File.expand_path('bitbucket/strategy', __dir__)
 
 
 module Obscured
@@ -29,8 +29,8 @@ module Obscured
 
 
         def self.registered(app)
-          app.helpers Obscured::Doorman::Base::Helpers
-          app.helpers Obscured::Doorman::Helpers
+          app.helpers Doorman::Base::Helpers
+          app.helpers Doorman::Helpers
 
           Warden::Strategies.add(:bitbucket, Bitbucket::Strategy)
 
@@ -45,7 +45,7 @@ module Obscured
               user: Bitbucket.configuration[:client_id],
               password: Bitbucket.configuration[:client_secret],
               payload: "code=#{params[:code]}&grant_type=authorization_code&scope=#{Bitbucket.configuration[:scopes]}",
-              headers: {Accept: 'application/json'}
+              headers: { Accept: 'application/json' }
             ).execute
 
             json = JSON.parse(response.body)
@@ -70,10 +70,9 @@ module Obscured
             redirect '/doorman/login'
           ensure
             # Notify if there are any messages from Warden.
-            unless warden.message.blank?
-              notify :error, warden.message
-            end
-            redirect Obscured::Doorman.configuration.use_referrer && session[:return_to] ? session.delete(:return_to) : Obscured::Doorman.configuration.paths[:success]
+            notify :error, warden.message unless warden.message.blank?
+
+            redirect(Doorman.configuration.use_referrer && session[:return_to] ? session.delete(:return_to) : Doorman.configuration.paths[:success])
           end
         end
       end

@@ -4,8 +4,8 @@ module Obscured
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      store_in database: Obscured::Doorman.configuration.db_name,
-               client: Obscured::Doorman.configuration.db_client,
+      store_in database: Doorman.configuration.db_name,
+               client: Doorman.configuration.db_client,
                collection: 'users'
 
       field :username, type: String
@@ -14,18 +14,20 @@ module Obscured
       field :first_name, type: String, default: ''
       field :last_name, type: String, default: ''
       field :mobile, type: String, default: ''
-      field :role, type: Symbol, default: Obscured::Doorman::Roles::ADMIN
+      field :role, type: Symbol, default: Doorman::Roles::ADMIN
       field :confirmed, type: Boolean, default: false
 
-      has_many :tokens
+      has_many :tokens, autosave: true, class_name: 'Obscured::Doorman::Token', foreign_key: 'user_id'
 
       index({ username: 1 }, background: true)
 
       alias email username
 
+      attr_accessor :confirmed
+
       class << self
         def make(opts)
-          raise Obscured::Doorman::Error.new(:already_exists, what: 'User does already exists!') if User.where(username: opts[:username]).exists?
+          raise Doorman::Error.new(:already_exists, what: 'User does already exists!') if User.where(username: opts[:username]).exists?
 
           user = new
           user.username = opts[:username]
@@ -47,6 +49,7 @@ module Obscured
         def authenticate(username, password)
           user = find_by(username: username)
           return user if user&.authenticated?(password)
+
           nil
         end
       end
@@ -66,21 +69,20 @@ module Obscured
       end
 
       def authenticated?(password)
-        BCrypt::Password.new(self.password) == password ? true : false
+        (BCrypt::Password.new(self.password) == password)
       end
       alias password? authenticated?
 
       def remember_me!
-        Obscured::Doorman::Token.make!(
-          user: self,
+        tokens.build(
           type: :remember,
           token: token,
-          expires: Obscured::Doorman.configuration.remember_for.days.seconds
+          expires_at: (DateTime.now + Doorman.configuration.remember_for.days)
         )
       end
 
       def forget_me!
-        tokens.delete(type: :remember)
+        Doorman::Token.where(user_id: id, type: :remember).destroy
       end
 
       def confirm!
@@ -90,24 +92,23 @@ module Obscured
       end
 
       def forgot_password!
-        Obscured::Doorman::Token.make!(
+        tokens.build(
           user: self,
           type: :password,
           token: token,
-          expires: 2.hours.seconds
+          expires_at: (DateTime.now + 2.hours)
         )
       end
 
       def remembered_password!
-        tokens.delete(type: :password)
-        save
+        Doorman::Token.where(user_id: id, type: :password).destroy
       end
 
       def reset_password!(password, token)
-        token = tokens.where(token: token)
-        unless token
-          self.set_password(password)
-          save
+        token = Doorman::Token.find_by(token: token)
+        if token && token.type.eql?(:password)
+          set_password(password)
+          return save
         end
         false
       end

@@ -63,28 +63,7 @@ module Obscured
         @config_values = {}
 
         # set default attribute values
-        @defaults = OpenStruct.new(
-          confirmation: false,
-          registration: false,
-          use_referrer: true,
-          remember_cookie: 'sinatra.doorman.remember',
-          remember_for: 30,
-          db_name: 'doorman',
-          db_client: :doorman,
-          smtp_domain: 'doorman.local',
-          smtp_server: '127.0.0.1',
-          smtp_port: 587,
-          smtp_username: nil,
-          smtp_password: nil,
-          providers: [],
-          paths: {
-            success: '/home',
-            login: '/doorman/login',
-            logout: '/doorman/logout',
-            forgot: '/doorman/forgot',
-            reset: '/doorman/reset'
-          }
-        )
+        @defaults = _defaults
       end
 
       def [](key)
@@ -108,6 +87,31 @@ module Obscured
 
       def set_value(name, value)
         @config_values[name] = value
+      end
+
+      def _defaults
+        OpenStruct.new(
+          confirmation: false,
+          registration: false,
+          use_referrer: true,
+          remember_cookie: 'sinatra.doorman.remember',
+          remember_for: 30,
+          db_name: 'doorman',
+          db_client: :doorman,
+          smtp_domain: 'doorman.local',
+          smtp_server: '127.0.0.1',
+          smtp_port: 587,
+          smtp_username: nil,
+          smtp_password: nil,
+          providers: [],
+          paths: {
+            success: '/home',
+            login: '/doorman/login',
+            logout: '/doorman/logout',
+            forgot: '/doorman/forgot',
+            reset: '/doorman/reset'
+          }
+        )
       end
     end
   end
