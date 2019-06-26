@@ -12,6 +12,8 @@ require_relative '../lib/obscured-doorman'
 
 SimpleCov.start do
   add_filter '/spec/'
+
+  add_group 'Providers', 'lib/obscured-doorman/providers'
 end
 
 # pull in the code
