@@ -47,7 +47,7 @@ module Obscured
         end
 
         def authenticate(username, password)
-          user = find_by(username: username)
+          user = where(username: username).first
           return user if user&.authenticated?(password)
 
           nil
