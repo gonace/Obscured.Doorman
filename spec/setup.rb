@@ -11,9 +11,16 @@ require 'simplecov'
 require_relative '../lib/obscured-doorman'
 
 SimpleCov.start do
+  add_filter 'version'
   add_filter '/spec/'
+  add_filter %r{^/spec/}
 
-  add_group 'Providers', 'lib/obscured-doorman/providers'
+  #add_group 'Base', 'lib/obscured-doorman/'
+  #add_group 'Providers', 'lib/obscured-doorman/providers/'
+  #add_group 'Strategies', 'lib/obscured-doorman/strategies/'
+  #add_group 'Utilities', 'lib/obscured-doorman/utilities/'
+
+  track_files '{lib}/**/*.rb'
 end
 
 # pull in the code
