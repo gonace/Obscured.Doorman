@@ -109,7 +109,7 @@ module Obscured
       end
 
       def reset_password!(password, token)
-        token = Doorman::Token.find_by(token: token)
+        token = tokens.find_by(token: token)
         if token && token.type.eql?(:password)
           set_password(password)
           return save

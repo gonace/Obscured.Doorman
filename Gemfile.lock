@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    obscured-doorman (1.5.0)
+    obscured-doorman (1.5.1)
       bcrypt
       geocoder
       haml
