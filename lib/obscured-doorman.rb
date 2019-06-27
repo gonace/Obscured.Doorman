@@ -52,8 +52,8 @@ module Obscured
       def setup
         yield(configuration)
 
-        require 'obscured-doorman/user'
-        require 'obscured-doorman/token'
+        require 'obscured-doorman/models/user'
+        require 'obscured-doorman/models/token'
       end
 
       def configuration

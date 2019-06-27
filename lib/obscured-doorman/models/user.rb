@@ -1,8 +1,13 @@
+# frozen_string_literal: true
+
+require 'obscured-timeline'
+
 module Obscured
   module Doorman
     class User
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Mongoid::Timeline::Tracker
 
       store_in database: Doorman.configuration.db_name,
                client: Doorman.configuration.db_client,
@@ -37,6 +42,7 @@ module Obscured
           user.mobile = opts[:mobile] unless opts[:mobile].nil?
           user.role = opts[:role] unless opts[:role].nil?
           user.confirmed = opts[:confirmed] unless opts[:confirmed].nil?
+          user.add_event(type: :account, message: 'Account created', producer: opts[:producer].nil? ? user.username : opts[:producer])
           user
         end
 
@@ -78,6 +84,7 @@ module Obscured
       alias password? authenticated?
 
       def remember_me!
+        add_event(type: :remember, message: 'Account set to be remembered upon login', producer: username)
         tokens.build(
           type: :remember,
           token: token,
@@ -86,16 +93,19 @@ module Obscured
       end
 
       def forget_me!
+        add_event(type: :remember, message: 'Account set not to be remembered upon login', producer: username)
         tokens.where(type: :remember).destroy
       end
 
       def confirm!
+        add_event(type: :confirmation, message: 'Account was successfully confirmed', producer: username)
         self.confirmed = true
         tokens.where(type: :confirm).destroy
         save
       end
 
       def forgot_password!
+        add_event(type: :password, message: 'Reset password procedure has been started', producer: username)
         tokens.build(
           user: self,
           type: :password,
@@ -105,6 +115,7 @@ module Obscured
       end
 
       def remembered_password!
+        add_event(type: :password, message: 'Reset password procedure has been cancelled since successful login was achived', producer: username)
         tokens.where(type: :password).destroy
       end
 
@@ -112,6 +123,7 @@ module Obscured
         token = tokens.find_by(token: token)
         if token && token.type.eql?(:password)
           set_password(password)
+          add_event(type: :password, message: 'Password was successfully reset', producer: username)
           return save
         end
         false
