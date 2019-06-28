@@ -5,7 +5,6 @@ require File.expand_path('github/messages', __dir__)
 require File.expand_path('github/access_token', __dir__)
 require File.expand_path('github/strategy', __dir__)
 
-
 module Obscured
   module Doorman
     module Providers

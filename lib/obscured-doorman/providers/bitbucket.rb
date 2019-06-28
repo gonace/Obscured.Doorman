@@ -5,7 +5,6 @@ require File.expand_path('bitbucket/messages', __dir__)
 require File.expand_path('bitbucket/access_token', __dir__)
 require File.expand_path('bitbucket/strategy', __dir__)
 
-
 module Obscured
   module Doorman
     module Providers
