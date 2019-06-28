@@ -5,7 +5,7 @@ module Obscured
     module Strategies
       class RememberMeStrategy < Warden::Strategies::Base
         def valid?
-          !!env['rack.cookies'][Doorman.configuration.remember_cookie]
+          !env['rack.cookies'][Doorman.configuration.remember_cookie].nil?
         end
 
         def authenticate!
