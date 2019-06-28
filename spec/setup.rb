@@ -1,26 +1,19 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.dirname(__FILE__)
+# Pull in test utilities
+require 'simplecov'
 require 'factory_bot'
 require 'mongoid'
 require 'pp'
 require 'rack/test'
 require 'rspec'
-require 'simplecov'
-
-require_relative '../lib/obscured-doorman'
-
-SimpleCov.start do
-  add_filter 'version'
-  add_filter '/spec/'
-
-  track_files '{lib}/**/*.rb'
-end
 
 # pull in the code
+require_relative '../lib/obscured-doorman'
+
+# pull in test helpers
 Dir.glob('./spec/helpers/*.rb').sort.each(&method(:require))
 Dir.glob('./spec/matchers/*.rb').sort.each(&method(:require))
-#Dir.glob('../lib/*.rb').sort.each(&method(:require))
 
 Mongoid.load!(File.join(File.dirname(__FILE__), '/config/mongoid.yml'), 'spec')
 Mongo::Logger.logger.level = Logger::ERROR
