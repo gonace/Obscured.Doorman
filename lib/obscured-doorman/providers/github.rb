@@ -54,7 +54,7 @@ module Obscured
               scope: json['scope']
             )
 
-            emails = RestClient.get 'https://api.github.com/user/emails',Authorization: "token #{token.access_token}"
+            emails = RestClient.get 'https://api.github.com/user/emails', Authorization: "token #{token.access_token}"
             emails = JSON.parse(emails.body)
             token.emails = emails.map { |e| e['email'] }
             GitHub.configuration[:token] = token
