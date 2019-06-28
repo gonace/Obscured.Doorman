@@ -58,7 +58,6 @@ module Obscured
       # Authentication Providers
       config_option :paths
 
-
       attr_reader :defaults
 
       def initialize
