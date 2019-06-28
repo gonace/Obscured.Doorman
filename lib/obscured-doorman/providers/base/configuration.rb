@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Obscured
   module Doorman
     module Providers
@@ -38,9 +40,7 @@ module Obscured
         # Authentication token
         config_option :token
 
-
         attr_reader :defaults
-
 
         def [](key)
           read_value(key)
@@ -49,7 +49,6 @@ module Obscured
         def []=(key, value)
           set_value(key, value)
         end
-
 
         private
 

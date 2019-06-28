@@ -64,7 +64,6 @@ module Obscured
         end
       end
 
-
       def name
         "#{first_name} #{last_name}"
       end
@@ -128,7 +127,6 @@ module Obscured
         end
         false
       end
-
 
       protected
 

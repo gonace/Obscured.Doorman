@@ -76,7 +76,6 @@ module Obscured
         set_value(key, value)
       end
 
-
       private
 
       def read_value(name)
