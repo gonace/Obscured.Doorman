@@ -18,8 +18,8 @@ module Obscured
 
       belongs_to :user, autosave: true, class_name: 'Obscured::Doorman::User', inverse_of: 'tokens'
 
-      index({ expires_at: 1 }, background: true, expire_after_seconds: 172800)
-      index({ used_at: 1 }, background: true, expire_after_seconds: 345600)
+      index({ expires_at: 1 }, background: true, expire_after_seconds: 172_800)
+      index({ used_at: 1 }, background: true, expire_after_seconds: 345_600)
 
       class << self
         def make(opts)
