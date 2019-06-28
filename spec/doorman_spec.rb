@@ -32,24 +32,39 @@ describe Obscured::Doorman::Base do
         expect(last_response.status).to eq(302)
         expect(last_response).to be_redirect
         expect(last_response.location).to eq('http://example.org/home')
-
         follow_redirect!
-
         expect(last_response.body).to eq('Hello World!')
       end
     end
 
     context 'unsuccessful' do
-      before(:each) {
-        do_login(username: email, password: 'foo/bar')
-      }
+      context 'wrong password' do
+        before(:each) {
+          do_login(username: email, password: 'foo/bar')
+        }
 
-      it 'redirects back to login if authentication failed' do
-        expect(last_response.status).to eq(302)
+        it 'redirects back to login if authentication failed' do
+          expect(last_response.status).to eq(302)
+          follow_redirect!
+          expect(last_response.location).to eq('http://example.org/doorman/login')
+        end
+      end
 
-        follow_redirect!
+      context 'user not confirmed' do
+        before(:each) {
+          Obscured::Doorman.configuration[:confirmation] = true
+          do_login(username: email, password: password)
+        }
 
-        expect(last_response.location).to eq('http://example.org/doorman/login')
+        after(:each) {
+          Obscured::Doorman.configuration[:confirmation] = false
+        }
+
+        it 'redirects back to login when authentication failed due to confirmation not completed' do
+          expect(last_response.status).to eq(302)
+          follow_redirect!
+          expect(last_response.location).to eq('http://example.org/doorman/login')
+        end
       end
     end
   end
