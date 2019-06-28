@@ -53,7 +53,7 @@ module Obscured
         private
 
         def read_value(name)
-          if @config_values.has_key?(name)
+          if @config_values.key?(name)
             @config_values[name]
           else
             @defaults.send(name)

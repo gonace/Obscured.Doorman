@@ -12,7 +12,6 @@ module Obscured
       end
     end
 
-
     module Base
       module Helpers
         # Generates a flash message by trying to fetch a default message,
@@ -178,7 +177,6 @@ module Obscured
         end
       end
     end
-
 
     class Middleware < Sinatra::Base
       helpers Sinatra::Cookies

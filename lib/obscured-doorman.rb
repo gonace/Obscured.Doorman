@@ -31,7 +31,6 @@ require 'obscured-doorman/messages'
 require 'obscured-doorman/version'
 require 'obscured-doorman/base'
 
-
 module Obscured
   module Doorman
     class << self

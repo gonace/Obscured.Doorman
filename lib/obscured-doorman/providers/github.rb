@@ -27,7 +27,6 @@ module Obscured
           end
         end
 
-
         def self.registered(app)
           app.helpers Doorman::Base::Helpers
           app.helpers Doorman::Helpers

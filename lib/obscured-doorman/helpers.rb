@@ -57,9 +57,7 @@ module Obscured
       # @param [Symbol] format
       def authorized?(format = :json)
         unless authenticated?
-          if format == :json
-            halt 403, { 'Content-Type' => 'application/json' }, { message: 'Unauthorized' }.to_json
-          end
+          halt 403, { 'Content-Type' => 'application/json' }, { message: 'Unauthorized' }.to_json if format == :json
           halt 403
         end
       end
