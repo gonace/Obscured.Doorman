@@ -15,6 +15,7 @@ require 'rack/contrib/cookies'
 require 'rest-client'
 require 'warden'
 
+require 'obscured-doorman/loggable'
 require 'obscured-doorman/configuration'
 require 'obscured-doorman/errors'
 require 'obscured-doorman/providers/bitbucket'
@@ -22,7 +23,6 @@ require 'obscured-doorman/providers/github'
 require 'obscured-doorman/strategies/password'
 require 'obscured-doorman/strategies/forgot_password'
 require 'obscured-doorman/strategies/remember_me'
-require 'obscured-doorman/utilities/hash'
 require 'obscured-doorman/utilities/roles'
 require 'obscured-doorman/utilities/types'
 require 'obscured-doorman/helpers'
@@ -33,6 +33,8 @@ require 'obscured-doorman/base'
 
 module Obscured
   module Doorman
+    extend Loggable
+
     class << self
       # Configuration Object (instance of Obscured::Doorman::Configuration)
       attr_writer :configuration
@@ -63,12 +65,6 @@ module Obscured
 
       def default_configuration
         configuration.defaults
-      end
-
-      def logger
-        log = Logger.new(STDOUT)
-        log.level = Logger::DEBUG
-        log
       end
     end
   end

@@ -16,15 +16,17 @@ module Obscured
       field :username, type: String
       field :password, type: String
       field :salt, type: String
-      field :first_name, type: String, default: ''
-      field :last_name, type: String, default: ''
-      field :mobile, type: String, default: ''
+      field :first_name, type: String
+      field :last_name, type: String
+      field :mobile, type: String
       field :role, type: Symbol, default: Doorman::Roles::ADMIN
       field :confirmed, type: Boolean, default: false
 
       has_many :tokens, autosave: true, class_name: 'Obscured::Doorman::Token', foreign_key: 'user_id'
 
       index({ username: 1 }, background: true)
+
+      after_initialize :set_salt
 
       alias email username
 
@@ -84,11 +86,13 @@ module Obscured
 
       def remember_me!
         add_event(type: :remember, message: 'Account set to be remembered upon login', producer: username)
-        tokens.build(
+        token = tokens.build(
           type: :remember,
           token: token,
           expires_at: (DateTime.now + Doorman.configuration.remember_for.days)
         )
+        save
+        token
       end
 
       def forget_me!
@@ -105,12 +109,14 @@ module Obscured
 
       def forgot_password!
         add_event(type: :password, message: 'Reset password procedure has been started', producer: username)
-        tokens.build(
+        token = tokens.build(
           user: self,
           type: :password,
           token: token,
           expires_at: (DateTime.now + 2.hours)
         )
+        save
+        token
       end
 
       def remembered_password!
@@ -130,22 +136,20 @@ module Obscured
 
       protected
 
-      def salt
-        if @salt.nil? || @salt.empty?
-          secret = Digest::SHA1.hexdigest("--#{username}--")
-          self.salt = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{secret}--")
-          save
-        end
-        @salt
+      #def _password(password)
+      #  (salt + password)
+      #end
+
+      def set_salt
+        return unless salt.nil? || salt.empty?
+
+        secret = Digest::SHA1.hexdigest("--#{username}--")
+        self.salt = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{secret}--")
       end
 
-      def encrypt(string)
-        Digest::SHA1.hexdigest("--#{salt}--#{string}--")
-      end
-
-      def token
-        encrypt("--#{username}/#{Time.now.utc}--")
-      end
+      #def encrypt(string)
+      #  Digest::SHA1.hexdigest("--#{salt}--#{string}--")
+      #end
     end
   end
 end

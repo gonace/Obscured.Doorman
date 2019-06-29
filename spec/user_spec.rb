@@ -135,4 +135,16 @@ describe Obscured::Doorman::User do
       expect(Obscured::Doorman::Token.where(type: :password).count).to be(0)
     end
   end
+
+  context 'salt' do
+    let!(:user) { FactoryBot.create(:user) }
+
+    before(:each) { user.reload }
+
+    it 'sets salt' do
+      user.send(:salt)
+      #expect(user.send(:salt)).to_not be(nil)
+      #expect(user.salt).to_not be(nil)
+    end
+  end
 end

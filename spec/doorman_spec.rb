@@ -117,11 +117,25 @@ describe Obscured::Doorman::Base do
   end
 
   describe 'forget' do
-    def do_forget(overrides = {})
+    def do_forgot(overrides = {})
       cmd = {}
       cmd[:user] = {}
       cmd[:user][:username] = overrides[:username] if overrides[:username]
-      post '/doorman/forget', cmd
+      post '/doorman/forgot', cmd
+    end
+
+    let(:token) { user.tokens.where(type: :password).first }
+
+    context 'successful' do
+      before(:each) {
+        do_forgot(username: user.username)
+        user.reload
+      }
+
+      it 'confirms user and removes token' do
+        expect(last_response.status).to eq(302)
+        expect(user.tokens.where(type: :password).count).to eq(1)
+      end
     end
   end
 
@@ -132,6 +146,12 @@ describe Obscured::Doorman::Base do
       cmd[:user][:username] = overrides[:username] if overrides[:username]
       cmd[:user][:token] = overrides[:token] if overrides[:token]
       post '/doorman/reset', cmd
+    end
+  end
+
+  describe 'configuration' do
+    it 'should return default configuration' do
+      expect(Obscured::Doorman.default_configuration).to_not be(nil)
     end
   end
 end

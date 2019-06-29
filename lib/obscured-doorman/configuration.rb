@@ -13,16 +13,17 @@ module Obscured
         end
       end
 
-      def self.proc_config_option(name)
-        define_method(name) do |&block|
-          set_value(name, block) unless block.nil?
-          read_value(name)
-        end
-
-        define_method("#{name}=") do |value|
-          set_value(name, value)
-        end
-      end
+      #def self.proc_config_option(name)
+      #  define_method(name) do |&block|
+      #    set_value(name, block) unless block.nil?
+      #    read_value(name)
+      #  end
+      #
+      #  define_method("#{name}=") do |value|
+      #    set_value(name, value)
+      #  end
+      #end
+      config_option :log_level
 
       # Enables/disables user confirmation
       config_option :confirmation
@@ -91,6 +92,7 @@ module Obscured
 
       def _defaults
         OpenStruct.new(
+          log_level: Logger::DEBUG,
           confirmation: false,
           registration: false,
           use_referrer: true,
