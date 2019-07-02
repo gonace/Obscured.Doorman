@@ -3,6 +3,12 @@
 require 'setup'
 
 describe Obscured::Doorman::Loggable do
+  describe 'logger' do
+    it 'get the default logger' do
+      expect(Obscured::Doorman.logger).to_not eq(nil)
+    end
+  end
+
   describe '#logger=' do
     let(:logger) do
       Logger.new($stdout).tap do |log|

@@ -15,7 +15,6 @@ module Obscured
 
         Obscured::Doorman::Middleware.set :views, "#{File.dirname(__FILE__)}/../views/doorman"
 
-
         get '/home' do
           authorize!
 

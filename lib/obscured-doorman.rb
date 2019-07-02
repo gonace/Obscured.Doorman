@@ -38,8 +38,6 @@ module Obscured
     class << self
       # Configuration Object (instance of Obscured::Doorman::Configuration)
       attr_writer :configuration
-      # Logger
-      attr_writer :logger
 
       ##
       # Configuration options should be set by passing a hash:
