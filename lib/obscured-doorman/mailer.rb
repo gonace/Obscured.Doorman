@@ -13,7 +13,7 @@ module Obscured
       end
 
       def deliver!
-        Doorman.logger.debug "Sending mail to #{@to}, from: #{@from}, with subject: #{@subject}"
+        Doorman.logger.debug "Sending mail to #{@to}, from: #{@from}, with subject: #{@subject} and text #{@text}"
         mail = Mail.new(to: @to, from: @from, subject: @subject) do
           delivery_method :smtp,
                           address: Doorman.configuration.smtp_server,
