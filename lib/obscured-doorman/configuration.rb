@@ -23,6 +23,8 @@ module Obscured
       #    set_value(name, value)
       #  end
       #end
+
+      # Set log level
       config_option :log_level
 
       # Enables/disables user confirmation

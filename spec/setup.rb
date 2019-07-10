@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 # Pull in test utilities
+require 'dotenv'
 require 'simplecov'
 require 'factory_bot'
 require 'mongoid'
 require 'pp'
 require 'rack/test'
 require 'rspec'
+
+Dotenv.load(File.join(File.dirname(__FILE__), '../.env'))
 
 # pull in the code
 require_relative '../lib/obscured-doorman'
@@ -22,6 +25,11 @@ Obscured::Doorman.setup do |cfg|
   cfg.db_client = :default
   cfg.db_name = 'doorman_testing'
   cfg.registration = true
+  cfg.smtp_domain = ENV['MAILGUN_DOMAIN']
+  cfg.smtp_server = ENV['MAILGUN_SMTP_SERVER']
+  cfg.smtp_username = ENV['MAILGUN_SMTP_LOGIN']
+  cfg.smtp_password = ENV['MAILGUN_SMTP_PASSWORD']
+  cfg.smtp_port = ENV['MAILGUN_SMTP_PORT']
 end
 
 RSpec.configure do |c|

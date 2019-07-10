@@ -97,7 +97,7 @@ module Obscured
             }
             user.save
 
-            if File.exist?('/templates/account_activation')
+            if File.exist?('views/doorman/templates/account_activation')
               template = haml :'/templates/account_activation', layout: false, locals: {
                 user: user.username,
                 link: token_link('confirm', user)
@@ -108,6 +108,8 @@ module Obscured
                 text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', user),
                 html: template
               ).deliver!
+            else
+              Doorman.logger.warn "Template not found (views/doorman/templates/account_activation), account activation at #{token_link('confirm', user)}"
             end
 
             # Login when registration is completed
