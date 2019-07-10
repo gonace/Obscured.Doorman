@@ -33,7 +33,7 @@ module Obscured
           Warden::Strategies.add(:bitbucket, Bitbucket::Strategy)
 
           app.get '/doorman/oauth2/bitbucket' do
-            redirect "#{Bitbucket.configuration[:authorize_url]}?client_id=#{Bitbucket.configuration[:client_id]}&response_type=code&scopes=#{Bitbucket.configuration[:scopes]}"
+            redirect("#{Bitbucket.configuration[:authorize_url]}?client_id=#{Bitbucket.configuration[:client_id]}&response_type=code&scopes=#{Bitbucket.configuration[:scopes]}")
           end
 
           app.get '/doorman/oauth2/bitbucket/callback/?' do

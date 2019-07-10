@@ -66,7 +66,7 @@ module Obscured
           end
 
           app.get '/doorman/reset/:token/?' do
-            redirect Doorman.configuration.paths[:success] if authenticated?
+            redirect(Doorman.configuration.paths[:success]) if authenticated?
 
             if params[:token].nil? || params[:token].empty?
               notify :error, :token_not_found
@@ -89,7 +89,7 @@ module Obscured
               redirect(Doorman.configuration.paths[:login])
             end
 
-            haml :reset, locals: { token: token, email: user&.username }
+            haml :reset, locals: { token: token.token, email: user&.username }
           end
 
           app.post '/doorman/reset' do
