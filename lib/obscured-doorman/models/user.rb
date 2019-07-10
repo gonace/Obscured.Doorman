@@ -88,7 +88,7 @@ module Obscured
         add_event(type: :remember, message: 'Account set to be remembered upon login', producer: username)
         token = tokens.build(
           type: :remember,
-          token: token,
+          token: SecureRandom.uuid,
           expires_at: (DateTime.now + Doorman.configuration.remember_for.days)
         )
         save
@@ -98,6 +98,17 @@ module Obscured
       def forget_me!
         add_event(type: :remember, message: 'Account set not to be remembered upon login', producer: username)
         tokens.where(type: :remember).destroy
+      end
+
+      def confirm
+        add_event(type: :confirm, message: 'Confirmation token created', producer: username)
+        token = tokens.build(
+          type: :confirm,
+          token: SecureRandom.uuid,
+          expires_at: (DateTime.now + 14.days)
+        )
+        save
+        token
       end
 
       def confirm!
@@ -112,7 +123,7 @@ module Obscured
         token = tokens.build(
           user: self,
           type: :password,
-          token: token,
+          token: SecureRandom.uuid,
           expires_at: (DateTime.now + 2.hours)
         )
         save
@@ -136,20 +147,12 @@ module Obscured
 
       protected
 
-      #def _password(password)
-      #  (salt + password)
-      #end
-
       def set_salt
         return unless salt.nil? || salt.empty?
 
         secret = Digest::SHA1.hexdigest("--#{username}--")
         self.salt = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{secret}--")
       end
-
-      #def encrypt(string)
-      #  Digest::SHA1.hexdigest("--#{salt}--#{string}--")
-      #end
     end
   end
 end

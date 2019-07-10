@@ -22,6 +22,7 @@ Mongoid.load!(File.join(File.dirname(__FILE__), '/config/mongoid.yml'), 'spec')
 Mongo::Logger.logger.level = Logger::ERROR
 
 Obscured::Doorman.setup do |cfg|
+  cfg.log_level = Logger::ERROR
   cfg.db_client = :default
   cfg.db_name = 'doorman_testing'
   cfg.registration = true

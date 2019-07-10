@@ -47,11 +47,11 @@ module Obscured
                 Doorman::Mailer.new(
                   to: user.username,
                   subject: 'Password change request',
-                  text: "We have received a password change request for your account (#{user.username}). " + token_link('reset', user),
+                  text: "We have received a password change request for your account (#{user.username}). " + token_link(:password, user),
                   html: template
                 ).deliver!
               else
-                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset.haml), account password reset at #{token_link('confirm', user)}"
+                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset.haml), account password reset at #{token_link(:password, user)}"
               end
 
               notify :success, :forgot_success
