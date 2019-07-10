@@ -39,7 +39,7 @@ module Obscured
 
               user.forgot_password!
 
-              if File.exist?('views/doorman/templates/password_reset')
+              if File.exist?('views/doorman/templates/password_reset.haml')
                 template = haml :'/templates/password_reset', layout: false, locals: {
                   user: user.username,
                   link: token_link('reset', user)
@@ -51,7 +51,7 @@ module Obscured
                   html: template
                 ).deliver!
               else
-                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset), account password reset at #{token_link('confirm', user)}"
+                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset.haml), account password reset at #{token_link('confirm', user)}"
               end
 
               notify :success, :forgot_success
@@ -108,7 +108,7 @@ module Obscured
               params[:user][:token]
             )
 
-            if success && File.exist?('views/doorman/templates/password_confirmation')
+            if success && File.exist?('views/doorman/templates/password_confirmation.haml')
               position = Geocoder.search(request.ip)
               template = haml :'/templates/password_confirmation', layout: false, locals: {
                 user: user&.username,
@@ -124,7 +124,7 @@ module Obscured
                 html: template
               ).deliver!
             else
-              Doorman.logger.warn "Template not found (views/doorman/templates/password_confirmation) The password for your account (#{user&.username}) was recently changed."
+              Doorman.logger.warn "Template not found (views/doorman/templates/password_confirmation.haml) The password for your account (#{user&.username}) was recently changed."
 
               notify :error, :reset_unmatched_passwords
               redirect(Doorman.configuration.paths[:login])
