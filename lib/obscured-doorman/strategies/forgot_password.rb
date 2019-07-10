@@ -9,13 +9,11 @@ module Obscured
             # If the user requested a new password,
             # but then remembers and logs in,
             # then invalidate password reset token
-            if auth.winning_strategy.is_a?(Doorman::Strategies::Password)
-              user.remembered_password!
-            end
+            user.remembered_password! if auth.winning_strategy.is_a?(Doorman::Strategies::Password)
           end
 
           app.get '/doorman/forgot/?' do
-            redirect Doorman.configuration.paths[:success] if authenticated?
+            redirect(Doorman.configuration.paths[:success]) if authenticated?
 
             email = cookies[:email]
             email = params[:email] if email.nil?
@@ -37,21 +35,21 @@ module Obscured
                 redirect(Doorman.configuration.paths[:forgot])
               end
 
-              user.forgot_password!
+              token = user.forgot_password!
 
               if File.exist?('views/doorman/templates/password_reset.haml')
                 template = haml :'/templates/password_reset', layout: false, locals: {
                   user: user.username,
-                  link: token_link(:password, user)
+                  link: token_link('reset', token.token)
                 }
                 Doorman::Mailer.new(
                   to: user.username,
                   subject: 'Password change request',
-                  text: "We have received a password change request for your account (#{user.username}). " + token_link(:password, user),
+                  text: "We have received a password change request for your account (#{user.username}). " + token_link('reset', token.token),
                   html: template
                 ).deliver!
               else
-                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset.haml), account password reset at #{token_link(:password, user)}"
+                Doorman.logger.warn "Template not found (views/doorman/templates/password_reset.haml), account password reset at #{token_link('reset', token.token)}"
               end
 
               notify :success, :forgot_success

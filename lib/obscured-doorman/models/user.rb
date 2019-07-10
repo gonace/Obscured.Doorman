@@ -131,7 +131,7 @@ module Obscured
       end
 
       def remembered_password!
-        add_event(type: :password, message: 'Reset password procedure has been cancelled since successful login was achived', producer: username)
+        add_event(type: :password, message: 'Reset password procedure has been cancelled since successful login was achieved', producer: username)
         tokens.where(type: :password).destroy
       end
 

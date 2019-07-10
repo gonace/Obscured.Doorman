@@ -22,9 +22,8 @@ module Obscured
         end
 
         # Generates a url for confirm account or reset password
-        def token_link(type, user)
-          token = user.tokens.where(type: type).first
-          "http://#{env['HTTP_HOST']}/doorman/#{type}/#{token.token}"
+        def token_link(action, token)
+          "http://#{env['HTTP_HOST']}/doorman/#{action}/#{token}"
         end
       end
 
@@ -97,22 +96,23 @@ module Obscured
               last_name: params[:user][:last_name]
             }
             user.save
-            user.confirm if Doorman.configuration[:confirmation]
 
             if Doorman.configuration[:confirmation]
+              token = user.confirm if Doorman.configuration[:confirmation]
+
               if File.exist?('views/doorman/templates/account_activation.haml')
                 template = haml :'/templates/account_activation', layout: false, locals: {
                   user: user.username,
-                  link: token_link(:confirm, user)
+                  link: token_link('confirm', token.token)
                 }
                 Doorman::Mailer.new(
                   to: user.username,
                   subject: 'Account activation request',
-                  text: "You have to activate your account (#{user.username}) before using this service. " + token_link(:confirm, user),
+                  text: "You have to activate your account (#{user.username}) before using this service. " + token_link('confirm', token.token),
                   html: template
                 ).deliver!
               else
-                Doorman.logger.warn "Template not found (views/doorman/templates/account_activation.haml), account activation at #{token_link(:confirm, user)}"
+                Doorman.logger.warn "Template not found (views/doorman/templates/account_activation.haml), account activation at #{token_link('confirm', token.token)}"
               end
             end
 
