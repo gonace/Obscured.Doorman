@@ -42,7 +42,7 @@ module Obscured
               if File.exist?('views/doorman/templates/password_reset.haml')
                 template = haml :'/templates/password_reset', layout: false, locals: {
                   user: user.username,
-                  link: token_link('reset', user)
+                  link: token_link(:password, user)
                 }
                 Doorman::Mailer.new(
                   to: user.username,
