@@ -40,6 +40,23 @@ describe Obscured::Doorman::Token do
 
     it 'sets the token as used' do
       expect(token.used_at).to_not be(nil)
+      expect(token.used?).to be(true)
+    end
+  end
+
+  context 'used?' do
+    let!(:token) { Obscured::Doorman::Token.make!(user: user, type: :password, token: sha) }
+
+    it 'is should not be used upon creation' do
+      expect(token.used?).to be(false)
+    end
+  end
+
+  context 'usable?' do
+    let!(:token) { Obscured::Doorman::Token.make!(user: user, type: :password, token: sha) }
+
+    it 'is should be usable upon creation' do
+      expect(token.usable?).to be(true)
     end
   end
 end

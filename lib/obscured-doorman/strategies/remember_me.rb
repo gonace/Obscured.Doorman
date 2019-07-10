@@ -36,7 +36,7 @@ module Obscured
               token = user.tokens.where(type: :remember).first
               user.remember_me! # new token
               auth.env['rack.cookies'][Doorman.configuration.remember_cookie] = {
-                value: token,
+                value: token.token,
                 expires: (Time.now + Doorman.configuration.remember_for.days.seconds),
                 path: '/'
               }

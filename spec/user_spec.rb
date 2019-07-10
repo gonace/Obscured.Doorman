@@ -89,6 +89,19 @@ describe Obscured::Doorman::User do
     end
   end
 
+  context 'confirm' do
+    let!(:user) { Obscured::Doorman::User.make(username: email, password: password) }
+    let!(:token) { user.confirm }
+
+    before(:each) { user.save }
+
+    it 'stores and returns token' do
+      expect(token).to_not be(nil)
+      expect(token.type).to be(:confirm)
+      expect(token.expires_at).to be_the_same_time_as(DateTime.now + 14.days)
+    end
+  end
+
   context 'forget_me' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:result) { user.remember_me! }
@@ -133,18 +146,6 @@ describe Obscured::Doorman::User do
     it 'removes token if user was successfully signed in' do
       expect(user.remembered_password!).to be(1)
       expect(Obscured::Doorman::Token.where(type: :password).count).to be(0)
-    end
-  end
-
-  context 'salt' do
-    let!(:user) { FactoryBot.create(:user) }
-
-    before(:each) { user.reload }
-
-    it 'sets salt' do
-      user.send(:salt)
-      #expect(user.send(:salt)).to_not be(nil)
-      #expect(user.salt).to_not be(nil)
     end
   end
 end

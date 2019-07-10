@@ -134,15 +134,20 @@ module Obscured
           redirect(Doorman.configuration.paths[:success]) if authenticated?
 
           if params[:token].nil? || params[:token].empty?
-            notify :error, :confirm_no_token
+            notify :error, :token_not_found
             redirect(back)
           end
 
           token = Token.where(token: params[:token]).first
           if token.nil? && !token&.type.eql?(:confirm)
-            notify :error, :confirm_no_token
+            notify :error, :token_not_found
             redirect(back)
           end
+          if token&.used?
+            notify :error, :token_used
+            redirect(back)
+          end
+
           user = token&.user
           if user.nil?
             notify :error, :confirm_no_user

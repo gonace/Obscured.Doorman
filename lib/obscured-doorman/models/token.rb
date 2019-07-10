@@ -44,6 +44,14 @@ module Obscured
         self.used_at = DateTime.now
         save
       end
+
+      def usable?
+        used_at.nil? && expires_at > DateTime.now
+      end
+
+      def used?
+        !used_at.nil?
+      end
     end
   end
 end

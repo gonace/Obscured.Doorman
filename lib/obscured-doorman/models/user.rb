@@ -102,6 +102,7 @@ module Obscured
 
       def confirm
         add_event(type: :confirm, message: 'Confirmation token created', producer: username)
+        tokens.where(type: :confirm).destroy
         token = tokens.build(
           type: :confirm,
           token: SecureRandom.uuid,
@@ -120,6 +121,7 @@ module Obscured
 
       def forgot_password!
         add_event(type: :password, message: 'Reset password procedure has been started', producer: username)
+        tokens.where(type: :password).destroy
         token = tokens.build(
           user: self,
           type: :password,

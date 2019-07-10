@@ -36,6 +36,14 @@ module Obscured
               end
 
               token = user.forgot_password!
+              if token.nil? && !token&.type.eql?(:password)
+                notify :error, :token_not_found
+                redirect(back)
+              end
+              if token&.used?
+                notify :error, :token_used
+                redirect(back)
+              end
 
               if File.exist?('views/doorman/templates/password_reset.haml')
                 template = haml :'/templates/password_reset', layout: false, locals: {
@@ -61,13 +69,17 @@ module Obscured
             redirect Doorman.configuration.paths[:success] if authenticated?
 
             if params[:token].nil? || params[:token].empty?
-              notify :error, :reset_no_token
+              notify :error, :token_not_found
               redirect(Doorman.configuration.paths[:login])
             end
 
             token = Token.where(token: params[:token]).first
             if token.nil?
-              notify :error, :reset_no_token
+              notify :error, :token_not_found
+              redirect(Doorman.configuration.paths[:login])
+            end
+            if token&.used?
+              notify :error, :token_used
               redirect(Doorman.configuration.paths[:login])
             end
 
@@ -86,8 +98,12 @@ module Obscured
 
             token = Token.where(token: params[:user][:token]).first
             if token.nil?
-              notify :error, :reset_no_token
-              redirect(Doorman.configuration.paths[:login])
+              notify :error, :token_not_found
+              redirect(back)
+            end
+            if token&.used?
+              notify :error, :token_used
+              redirect(back)
             end
 
             user = token&.user
