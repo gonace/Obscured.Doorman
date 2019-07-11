@@ -12,13 +12,15 @@ describe Obscured::Doorman::Mailer do
     )
   end
 
-  #before(:each) { allow_any_instance_of(Mail).to receive(:deliver).and_return(true) }
-
   context 'deliver!' do
-    it 'sends mail upon calling .deliver!' do
-      #allow_any_instance_of(Mail).to receive(:deliver).and_return(true)
+    let(:result) { service.deliver! }
 
-      #expect(service.deliver!).to_not be(nil)
+    context 'successful' do
+      before(:each) { allow_any_instance_of(Mail::Message).to receive(:deliver).and_return(true) }
+
+      it 'sends mail upon calling .deliver!' do
+        expect(result).to_not be(nil)
+      end
     end
   end
 end

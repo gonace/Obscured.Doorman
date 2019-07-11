@@ -20,6 +20,32 @@ module Obscured
 
           'Hello World!'
         end
+
+        get '/session' do
+          authenticate
+
+          { session: session_info, user: user }.to_json
+        end
+
+        get '/user' do
+          authorized?
+          content_type :json
+
+          { user: user }.to_json
+        end
+
+        get '/user/xml' do
+          authorized?(:xml)
+          content_type :xml
+
+          { user: user }.to_xml
+        end
+
+        get '/logout' do
+          authorized?
+
+          logout
+        end
       end
     end
   end

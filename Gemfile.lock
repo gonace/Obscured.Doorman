@@ -10,7 +10,7 @@ GIT
 PATH
   remote: .
   specs:
-    obscured-doorman (1.5.95)
+    obscured-doorman (1.5.96)
       bcrypt
       geocoder
       haml

@@ -21,6 +21,7 @@ module Obscured
           if user.nil?
             fail!(Doorman::MESSAGES[:login_bad_credentials])
           elsif Doorman.configuration[:confirmation] && !user.confirmed
+            user.confirm
             fail!(Doorman::MESSAGES[:login_not_confirmed])
           else
             success!(user)
