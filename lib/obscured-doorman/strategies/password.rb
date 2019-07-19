@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'haml'
+
 module Obscured
   module Doorman
     module Strategies

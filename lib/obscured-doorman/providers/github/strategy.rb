@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'haml'
 require File.expand_path('messages', __dir__)
 
 module Obscured
