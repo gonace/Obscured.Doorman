@@ -2,6 +2,6 @@
 
 module Obscured
   module Doorman
-    VERSION = '1.5.96'
+    VERSION = '1.5.97'
   end
 end
