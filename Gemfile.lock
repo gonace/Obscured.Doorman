@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: eef4ecb46b04795408a771caf1c081d735db5283
+  revision: a40cbe20fe37f1d010ba3ccb143264749cdf6eb4
   specs:
     obscured-timeline (1.0.0)
       activesupport
