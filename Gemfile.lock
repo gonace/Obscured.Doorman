@@ -45,7 +45,7 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
-    factory_bot (6.0.2)
+    factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     fast-stemmer (1.0.2)
     geocoder (1.6.3)
@@ -132,7 +132,7 @@ GEM
     unf_ext (0.0.7.6)
     warden (1.2.8)
       rack (>= 2.0.6)
-    zeitwerk (2.3.0)
+    zeitwerk (2.3.1)
 
 PLATFORMS
   ruby
