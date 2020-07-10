@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: d3ae77df771ea62b0477e15b5d705720976ac031
+  revision: f9cbffe3f7ccfa872e9fbd0cb8d3728a2912526e
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -38,7 +38,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     backports (3.15.0)
     bcrypt (3.1.13)
-    bson (4.9.2)
+    bson (4.9.4)
     concurrent-ruby (1.1.6)
     diff-lcs (1.3)
     docile (1.3.2)
@@ -69,9 +69,9 @@ GEM
     mongoid (7.1.2)
       activemodel (>= 5.1, < 6.1)
       mongo (>= 2.7.0, < 3.0.0)
-    mongoid_search (0.3.6)
+    mongoid_search (0.4.0)
       fast-stemmer (~> 1.0.0)
-      mongoid (>= 3.0.0)
+      mongoid (>= 5.0.0)
     multi_json (1.14.1)
     mustermann (1.1.0)
       ruby2_keywords (~> 0.0.1)
