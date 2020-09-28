@@ -48,7 +48,7 @@ GEM
       activesupport (>= 5.0.0)
     fast-stemmer (1.0.2)
     geocoder (1.6.3)
-    haml (5.1.2)
+    haml (5.2.0)
       temple (>= 0.8.0)
       tilt
     http-accept (1.7.0)
