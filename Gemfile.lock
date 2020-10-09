@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: 6ad67d5e49976bc453893899a11027f30452a896
+  revision: 21aa83a57540d93237b49ce0e19c04234002164c
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -28,9 +28,9 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (6.0.3.3)
-      activesupport (= 6.0.3.3)
-    activesupport (6.0.3.3)
+    activemodel (6.0.3.4)
+      activesupport (= 6.0.3.4)
+    activesupport (6.0.3.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
