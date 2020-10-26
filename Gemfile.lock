@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: 0491836f027391778958d0ededb187c9dce8df70
+  revision: 2d0ae1c5a55c9ed3622a65a00206cd4a12c5f8ec
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -37,7 +37,7 @@ GEM
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
     bcrypt (3.1.16)
-    bson (4.10.1)
+    bson (4.11.0)
     concurrent-ruby (1.1.7)
     diff-lcs (1.3)
     docile (1.3.2)
