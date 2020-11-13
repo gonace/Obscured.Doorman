@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: c45ff666e94a655825f0f35f21ec5791c5e1dec3
+  revision: 5d2d37be9fd5d25531eb3148d888418842ca20a0
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -123,7 +123,7 @@ GEM
     temple (0.8.2)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    tzinfo (1.2.7)
+    tzinfo (1.2.8)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
