@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: 20862c1215b2737c934a983932d067424a9a20fa
+  revision: 5e1e1de1342172ebf664f7fadef691022a3f225d
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -28,14 +28,12 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (6.0.3.4)
-      activesupport (= 6.0.3.4)
-    activesupport (6.0.3.4)
+    activesupport (6.1.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-      zeitwerk (~> 2.2, >= 2.2.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     bcrypt (3.1.16)
     bson (4.11.1)
     concurrent-ruby (1.1.7)
@@ -44,9 +42,9 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
+    durran-validatable (2.0.1)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
-    fast-stemmer (1.0.2)
     geocoder (1.6.4)
     haml (5.2.1)
       temple (>= 0.8.0)
@@ -56,6 +54,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    leshill-will_paginate (2.3.11)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     mime-types (3.3)
@@ -65,12 +64,12 @@ GEM
     minitest (5.14.2)
     mongo (2.14.0)
       bson (>= 4.8.2, < 5.0.0)
-    mongoid (7.2.0)
-      activemodel (>= 5.1, < 6.1)
-      mongo (>= 2.10.5, < 3.0.0)
-    mongoid_search (0.4.0)
-      fast-stemmer (~> 1.0.0)
-      mongoid (>= 5.0.0)
+    mongoid (1.0.6)
+      activesupport (>= 2.2.2)
+      durran-validatable (>= 2.0.1)
+      leshill-will_paginate (>= 2.3.11)
+      mongo (>= 0.18.2)
+    mongoid_search (0.2.1)
     multi_json (1.15.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
@@ -123,10 +122,9 @@ GEM
     sinatra-partial (1.0.1)
       sinatra (>= 1.4)
     temple (0.8.2)
-    thread_safe (0.3.6)
     tilt (2.0.10)
-    tzinfo (1.2.8)
-      thread_safe (~> 0.1)
+    tzinfo (2.0.3)
+      concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
