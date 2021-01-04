@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: 5e1e1de1342172ebf664f7fadef691022a3f225d
+  revision: 103321e35b49d4e299a15fee8cc1d2694af9315f
   specs:
     obscured-timeline (1.0.0)
       activesupport
@@ -52,7 +52,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.8.5)
+    i18n (1.8.6)
       concurrent-ruby (~> 1.0)
     leshill-will_paginate (2.3.11)
     mail (2.7.1)
@@ -123,7 +123,7 @@ GEM
       sinatra (>= 1.4)
     temple (0.8.2)
     tilt (2.0.10)
-    tzinfo (2.0.3)
+    tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
