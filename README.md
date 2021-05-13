@@ -21,7 +21,7 @@
 ## Installation
 1. Add this line to your application's Gemfile:
 ```ruby
-gem 'obscured-doorman', :git => 'https://github.com/gonace/Obscured.Doorman.git', :branch => 'master'
+gem 'obscured-doorman'
 ```
 
 2. Execute:
