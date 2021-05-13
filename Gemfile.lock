@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/gonace/Obscured.Timeline.git
-  revision: 90135a25f0f0d424188c1ee163bec8649a2cd398
-  specs:
-    obscured-timeline (1.0.1)
-      activesupport
-      mongoid
-      mongoid_search
-
 PATH
   remote: .
   specs:
@@ -26,7 +17,7 @@ PATH
       warden
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (6.1.3.2)
       activesupport (= 6.1.3.2)
@@ -75,6 +66,10 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
+    obscured-timeline (1.0.1)
+      activesupport
+      mongoid
+      mongoid_search
     rack (2.2.3)
     rack-contrib (2.3.0)
       rack (~> 2.0)
@@ -134,16 +129,16 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   dotenv
   factory_bot
   obscured-doorman!
-  obscured-timeline!
+  obscured-timeline
   rack-test
   rspec
   simplecov
 
 BUNDLED WITH
-   1.17.3
+   2.2.17
