@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://www.github.com/gonace/Obscured.Doorman/compare/v0.3.0...v0.4.0) (2021-05-13)
+
+
+### Features
+
+* updated bundler and version ([2f7612c](https://www.github.com/gonace/Obscured.Doorman/commit/2f7612c22ee588616577fe83b321727f2ef39b98))
+
 ## [0.3.0](https://www.github.com/gonace/Obscured.Doorman/compare/v0.2.0...v0.3.0) (2021-05-13)
 
 
