@@ -24,6 +24,9 @@ jobs:
         with:
           ruby-version: 2.7.x
         if: ${{ steps.release.outputs.release_created }}
+      # Bundler install
+      - run: gem install bundler
+        if: ${{ steps.release.outputs.release_created }}
       # Bundle install
       - run: bundle install
         if: ${{ steps.release.outputs.release_created }}
