@@ -1,16 +1,8 @@
-# Obscured::Doorman Change Log
+# Changelog
 
-1.5.0
------
-- Renaming to Obscured::Doorman
+## 0.1.0 (2021-05-13)
 
 
-1.1.0
------
-- Configuration rewritten to be threadsafe
-- Authorization providers now need to be enabled by setting enabled = true
+### Features
 
-
-1.0.0
------
-- Initial version, converted into a gem
+* added as rubygem package ([88f288b](https://www.github.com/gonace/Obscured.Doorman/commit/88f288bca663733b5a9ade718932317492bbe780))
