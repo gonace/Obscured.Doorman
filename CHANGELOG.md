@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.4.1](https://www.github.com/gonace/Obscured.Doorman/compare/v0.4.0...v0.4.1) (2021-05-14)
+
+
+### Bug Fixes
+
+* Updated gem(s) ([50097ff](https://www.github.com/gonace/Obscured.Doorman/commit/50097ffd1d9676b92898d3ae90b15b5c59cadd13))
+
 ## [0.4.0](https://www.github.com/gonace/Obscured.Doorman/compare/v0.3.0...v0.4.0) (2021-05-13)
 
 
