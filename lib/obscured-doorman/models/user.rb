@@ -7,7 +7,7 @@ module Obscured
     class User
       include Mongoid::Document
       include Mongoid::Timestamps
-      include Mongoid::Timeline::Tracker
+      include Obscured::Timeline::Tracker
 
       store_in database: Doorman.configuration.db_name,
                client: Doorman.configuration.db_client,

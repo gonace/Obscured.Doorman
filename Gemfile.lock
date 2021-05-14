@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    obscured-doorman (1.5.99)
+    obscured-doorman (0.4.0)
       bcrypt
       geocoder
       haml
@@ -66,7 +66,7 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
-    obscured-timeline (1.0.1)
+    obscured-timeline (1.4.0)
       activesupport
       mongoid
       mongoid_search
