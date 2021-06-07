@@ -1,6 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/obscured-doorman.svg)](https://badge.fury.io/rb/obscured-doorman)
 [![Vulnerabilities](https://snyk.io/test/github/gonace/obscured.doorman/badge.svg)](https://snyk.io/test/github/gonace/obscured.doorman)
-[![Build Status](https://travis-ci.org/gonace/Obscured.Doorman.svg?branch=master)](https://travis-ci.org/gonace/Obscured.Doorman)
+[![Build Status](https://travis-ci.com/gonace/Obscured.Doorman.svg?branch=master)](https://travis-ci.org/gonace/Obscured.Doorman)
 [![Test Coverage](https://codeclimate.com/github/gonace/Obscured.Doorman/badges/coverage.svg)](https://codeclimate.com/github/gonace/Obscured.Doorman)
 [![Code Climate](https://codeclimate.com/github/gonace/Obscured.Doorman/badges/gpa.svg)](https://codeclimate.com/github/gonace/Obscured.Doorman)
 
