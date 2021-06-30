@@ -9,3 +9,5 @@ updates:
     open-pull-requests-limit: 0
     reviewers:
       - "gonace"
+    labels:
+      - "dependencies"
